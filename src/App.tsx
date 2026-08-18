@@ -27,8 +27,17 @@ import {
 } from '@/components/storefront/PublicPages';
 import { StoresBrowsePage } from '@/components/storefront/StoresBrowsePage';
 
+function Redirect({ to }: { to: string }) {
+  const { navigate } = useRouter();
+  useEffect(() => {
+    navigate(to);
+  }, [navigate, to]);
+  return null;
+}
+
 function AppRoutes() {
-  const { path, navigate } = useRouter();
+  const { path } = useRouter();
+  const route = path.split('#')[0];
   const { user, profile, loading: authLoading } = useAuth();
   const { store, loading: storeLoading } = useStore();
 
@@ -41,32 +50,30 @@ function AppRoutes() {
   }, [path]);
 
   // Public routes (no auth required)
-  if (path === '/') return <LandingPage />;
-  if (path === '/stores') return <StoresBrowsePage />;
-  if (path === '/signin') {
+  if (route === '/') return <LandingPage />;
+  if (route === '/stores') return <StoresBrowsePage />;
+  if (route === '/signin') {
     if (user) {
-      navigate('/dashboard');
-      return null;
+      return <Redirect to="/dashboard" />;
     }
     return <SignInPage />;
   }
-  if (path === '/signup') {
+  if (route === '/signup') {
     if (user) {
-      navigate('/dashboard');
-      return null;
+      return <Redirect to="/dashboard" />;
     }
     return <SignUpPage />;
   }
-  if (path === '/signout') return <SignOutRoute />;
+  if (route === '/signout') return <SignOutRoute />;
 
   // Public storefront routes
-  let match = matchRoute('/store/:slug', path);
+  let match = matchRoute('/store/:slug', route);
   if (match) return <StoreHomePage slug={match.slug} />;
-  match = matchRoute('/store/:slug/product/:productSlug', path);
+  match = matchRoute('/store/:slug/product/:productSlug', route);
   if (match) return <StoreProductPage slug={match.slug} productSlug={match.productSlug} />;
-  match = matchRoute('/store/:slug/cart', path);
+  match = matchRoute('/store/:slug/cart', route);
   if (match) return <CartPage slug={match.slug} />;
-  match = matchRoute('/store/:slug/checkout', path);
+  match = matchRoute('/store/:slug/checkout', route);
   if (match) return <CheckoutPage slug={match.slug} />;
 
   // Protected routes
@@ -75,32 +82,29 @@ function AppRoutes() {
   }
 
   if (!user) {
-    navigate('/signin');
-    return null;
+    return <Redirect to="/signin" />;
   }
 
   // Onboarding check
-  if (profile && !profile.onboarding_complete && path !== '/onboarding') {
-    navigate('/onboarding');
-    return null;
+  if (profile && !profile.onboarding_complete && route !== '/onboarding') {
+    return <Redirect to="/onboarding" />;
   }
 
-  if (path === '/onboarding') return <OnboardingPage />;
+  if (route === '/onboarding') return <OnboardingPage />;
 
   // Dashboard routes (require store)
-  if (path.startsWith('/dashboard')) {
+  if (route.startsWith('/dashboard')) {
     if (!store && !storeLoading) {
-      navigate('/onboarding');
-      return null;
+      return <Redirect to="/onboarding" />;
     }
     if (!store) return <LoadingPage label="Loading store..." />;
 
     // Store Builder is full-screen, no dashboard chrome
-    if (path === '/dashboard/builder') return <StoreBuilderPage />;
+    if (route === '/dashboard/builder') return <StoreBuilderPage />;
 
     let dashMatch: Record<string, string> | null;
 
-    dashMatch = matchRoute('/dashboard/products/:productId', path);
+    dashMatch = matchRoute('/dashboard/products/:productId', route);
     if (dashMatch) {
       return (
         <DashboardLayout>
@@ -108,7 +112,7 @@ function AppRoutes() {
         </DashboardLayout>
       );
     }
-    dashMatch = matchRoute('/dashboard/orders/:orderId', path);
+    dashMatch = matchRoute('/dashboard/orders/:orderId', route);
     if (dashMatch) {
       return (
         <DashboardLayout>
@@ -129,7 +133,7 @@ function AppRoutes() {
       '/dashboard/settings': <SettingsPage />,
     };
 
-    const content = pages[path];
+    const content = pages[route];
     if (content) {
       return <DashboardLayout>{content}</DashboardLayout>;
     }
@@ -139,8 +143,7 @@ function AppRoutes() {
   }
 
   // Fallback
-  navigate('/');
-  return null;
+  return <Redirect to="/" />;
 }
 
 export default function App() {

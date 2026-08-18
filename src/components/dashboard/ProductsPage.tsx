@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useStore } from '@/lib/store-context';
 import { useRouter } from '@/lib/router';
 import { useToast } from '@/lib/toast';
@@ -9,7 +9,7 @@ import { Modal, ConfirmDialog, Badge, Card } from '@/components/ui';
 import { Button, Input, Textarea, Select } from '@/components/ui';
 import { LoadingPage, EmptyState, ErrorState } from '@/components/ui/Feedback';
 import { formatCurrency, formatDate, slugify } from '@/lib/utils';
-import { Plus, Package, Edit2, Trash2, MoreVertical, Search, Eye, EyeOff, Archive } from 'lucide-react';
+import { Plus, Package, Edit2, Trash2, MoreVertical, Search, Eye, EyeOff, Archive, Upload, X, Image as ImageIcon } from 'lucide-react';
 
 const STATUS_VARIANTS: Record<ProductStatus, 'success' | 'warning' | 'slate'> = {
   published: 'success',
@@ -260,12 +260,43 @@ function ProductFormModal({
   const [price, setPrice] = useState(product ? (product.price_cents / 100).toFixed(2) : '');
   const [compareAt, setCompareAt] = useState(product?.compare_at_cents ? (product.compare_at_cents / 100).toFixed(2) : '');
   const [coverUrl, setCoverUrl] = useState(product?.cover_url || '');
+  const [uploadName, setUploadName] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [category, setCategory] = useState(product?.category || '');
   const [tags, setTags] = useState((product?.tags || []).join(', '));
   const [status, setStatus] = useState<ProductStatus>(product?.status || 'draft');
   const [featured, setFeatured] = useState(product?.featured || false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please choose an image file (PNG, JPG, GIF, WebP...)');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setUploadError('Image is too large — max 2 MB');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onerror = () => setUploadError('Could not read the file — try another image');
+    reader.onload = () => {
+      setCoverUrl(String(reader.result));
+      setUploadName(file.name);
+      setUploadError(null);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeUpload = () => {
+    setCoverUrl('');
+    setUploadName(null);
+    setUploadError(null);
+  };
 
   const handleSave = async () => {
     setError(null);
@@ -378,13 +409,58 @@ function ProductFormModal({
         <Input
           label="Cover image URL"
           value={coverUrl}
-          onChange={(e) => setCoverUrl(e.target.value)}
+          onChange={(e) => {
+            setCoverUrl(e.target.value);
+            setUploadName(null);
+          }}
           placeholder="https://..."
           hint="Paste an image URL for the product cover"
         />
+        <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 min-w-0">
+              {uploadName ? (
+                <>
+                  <ImageIcon className="h-4 w-4 text-turquoise-600 shrink-0" />
+                  <span className="text-sm font-medium text-slate-700 truncate">{uploadName}</span>
+                </>
+              ) : (
+                <p className="text-sm text-slate-500">Or upload an image from your device</p>
+              )}
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Button variant="secondary" size="sm" onClick={() => fileInputRef.current?.click()}>
+                <Upload className="h-4 w-4" />
+                {uploadName ? 'Replace' : 'Upload image'}
+              </Button>
+              {uploadName && (
+                <button
+                  onClick={removeUpload}
+                  className="h-8 w-8 rounded-lg hover:bg-red-50 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"
+                  title="Remove image"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          </div>
+          {uploadError && (
+            <p className="mt-2 text-xs font-medium text-red-600">{uploadError}</p>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </div>
         {coverUrl && (
-          <div className="aspect-[4/3] max-h-40 rounded-xl overflow-hidden bg-slate-100">
+          <div className="relative aspect-[4/3] max-h-40 rounded-xl overflow-hidden bg-slate-100">
             <img src={coverUrl} alt="Preview" className="h-full w-full object-cover" />
+            <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-ink/70 backdrop-blur text-[10px] font-medium text-white">
+              {uploadName ? 'Uploaded' : 'Remote URL'}
+            </span>
           </div>
         )}
         <div className="grid grid-cols-2 gap-4">

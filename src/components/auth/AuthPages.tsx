@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { useAuth } from '@/lib/auth';
 import { useRouter } from '@/lib/router';
 import { useToast } from '@/lib/toast';
-import { supabase } from '@/lib/supabase';
+import { data as db } from '@/lib/supabase';
 import { Sparkles, ArrowRight, Mail, Lock, User as UserIcon, ArrowLeft } from 'lucide-react';
 
 export function AuthLayout({ children, title, subtitle }: { children: ReactNode; title: string; subtitle: string }) {
@@ -275,9 +275,9 @@ export function SignOutRoute() {
 
 // Auto-create profile on signup if missing (called from auth context)
 export async function ensureProfile(userId: string, email: string, fullName: string) {
-  const { data } = await supabase.from('profiles').select('id').eq('id', userId).maybeSingle();
+  const { data } = await db.from('profiles').select('id').eq('id', userId).maybeSingle();
   if (!data) {
-    await supabase.from('profiles').insert({
+    await db.from('profiles').insert({
       id: userId,
       email,
       full_name: fullName,

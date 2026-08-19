@@ -1,22 +1,22 @@
-import { supabase } from './supabase';
+import { data as db } from './supabase';
 import type { Store, Product, ProductFile, Order, OrderItem, Customer, Coupon, Storefront, StorefrontBlock, StorefrontTheme } from './types';
 import { slugify, uid } from './utils';
 
 // ---------- Store ----------
 export async function getStoreBySlug(slug: string): Promise<Store | null> {
-  const { data, error } = await supabase.from('stores').select('*').eq('slug', slug).maybeSingle();
+  const { data, error } = await db.from('stores').select('*').eq('slug', slug).maybeSingle();
   if (error) throw error;
   return data as Store | null;
 }
 
 export async function getStoreById(id: string): Promise<Store | null> {
-  const { data, error } = await supabase.from('stores').select('*').eq('id', id).maybeSingle();
+  const { data, error } = await db.from('stores').select('*').eq('id', id).maybeSingle();
   if (error) throw error;
   return data as Store | null;
 }
 
 export async function getStoreForUser(userId: string): Promise<Store | null> {
-  const { data, error } = await supabase.from('stores').select('*').eq('user_id', userId).maybeSingle();
+  const { data, error } = await db.from('stores').select('*').eq('user_id', userId).maybeSingle();
   if (error) throw error;
   return data as Store | null;
 }
@@ -28,7 +28,7 @@ export async function createStore(userId: string, input: {
   description?: string;
   contact_email?: string;
 }): Promise<Store> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('stores')
     .insert({
       user_id: userId,
@@ -48,14 +48,14 @@ export async function createStore(userId: string, input: {
 }
 
 export async function updateStore(id: string, patch: Partial<Store>): Promise<Store> {
-  const { data, error } = await supabase.from('stores').update(patch).eq('id', id).select().single();
+  const { data, error } = await db.from('stores').update(patch).eq('id', id).select().single();
   if (error) throw error;
   return data as Store;
 }
 
 // ---------- Products ----------
 export async function listProducts(storeId: string): Promise<Product[]> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('products')
     .select('*')
     .eq('store_id', storeId)
@@ -66,7 +66,7 @@ export async function listProducts(storeId: string): Promise<Product[]> {
 }
 
 export async function listPublishedProducts(storeId: string): Promise<Product[]> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('products')
     .select('*')
     .eq('store_id', storeId)
@@ -78,13 +78,13 @@ export async function listPublishedProducts(storeId: string): Promise<Product[]>
 }
 
 export async function getProduct(id: string): Promise<Product | null> {
-  const { data, error } = await supabase.from('products').select('*').eq('id', id).maybeSingle();
+  const { data, error } = await db.from('products').select('*').eq('id', id).maybeSingle();
   if (error) throw error;
   return data as Product | null;
 }
 
 export async function getProductBySlug(storeId: string, slug: string): Promise<Product | null> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('products')
     .select('*')
     .eq('store_id', storeId)
@@ -97,7 +97,7 @@ export async function getProductBySlug(storeId: string, slug: string): Promise<P
 export async function createProduct(storeId: string, input: Partial<Product>): Promise<Product> {
   const title = input.title || 'Produit sans titre';
   const slug = slugify(input.slug || title);
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('products')
     .insert({
       store_id: storeId,
@@ -122,19 +122,19 @@ export async function createProduct(storeId: string, input: Partial<Product>): P
 export async function updateProduct(id: string, patch: Partial<Product>): Promise<Product> {
   const updatePatch: Record<string, unknown> = { ...patch };
   if (patch.slug) updatePatch.slug = slugify(patch.slug);
-  const { data, error } = await supabase.from('products').update(updatePatch).eq('id', id).select().single();
+  const { data, error } = await db.from('products').update(updatePatch).eq('id', id).select().single();
   if (error) throw error;
   return data as Product;
 }
 
 export async function deleteProduct(id: string): Promise<void> {
-  const { error } = await supabase.from('products').delete().eq('id', id);
+  const { error } = await db.from('products').delete().eq('id', id);
   if (error) throw error;
 }
 
 // ---------- Product Files ----------
 export async function listProductFiles(productId: string): Promise<ProductFile[]> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('product_files')
     .select('*')
     .eq('product_id', productId)
@@ -149,7 +149,7 @@ export async function addProductFile(productId: string, file: {
   file_type: string;
   download_url: string;
 }): Promise<ProductFile> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('product_files')
     .insert({
       product_id: productId,
@@ -165,13 +165,13 @@ export async function addProductFile(productId: string, file: {
 }
 
 export async function deleteProductFile(id: string): Promise<void> {
-  const { error } = await supabase.from('product_files').delete().eq('id', id);
+  const { error } = await db.from('product_files').delete().eq('id', id);
   if (error) throw error;
 }
 
 // ---------- Orders ----------
 export async function listOrders(storeId: string): Promise<Order[]> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('orders')
     .select('*')
     .eq('store_id', storeId)
@@ -181,19 +181,19 @@ export async function listOrders(storeId: string): Promise<Order[]> {
 }
 
 export async function getOrder(id: string): Promise<Order | null> {
-  const { data, error } = await supabase.from('orders').select('*').eq('id', id).maybeSingle();
+  const { data, error } = await db.from('orders').select('*').eq('id', id).maybeSingle();
   if (error) throw error;
   return data as Order | null;
 }
 
 export async function getOrderByToken(token: string): Promise<Order | null> {
-  const { data, error } = await supabase.from('orders').select('*').eq('access_token', token).maybeSingle();
+  const { data, error } = await db.from('orders').select('*').eq('access_token', token).maybeSingle();
   if (error) throw error;
   return data as Order | null;
 }
 
 export async function listOrderItems(orderId: string): Promise<OrderItem[]> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('order_items')
     .select('*')
     .eq('order_id', orderId)
@@ -217,7 +217,7 @@ export async function createOrder(input: {
   notes?: string;
   items: { product_id: string; product_title: string; price_cents: number; cover_url: string | null; quantity: number }[];
 }): Promise<{ order: Order; customer: Customer | null }> {
-  const { data: orderData, error: orderErr } = await supabase
+  const { data: orderData, error: orderErr } = await db
     .from('orders')
     .insert({
       store_id: input.store_id,
@@ -248,13 +248,13 @@ export async function createOrder(input: {
     quantity: it.quantity,
   }));
   if (itemsRows.length > 0) {
-    const { error: itemsErr } = await supabase.from('order_items').insert(itemsRows);
+    const { error: itemsErr } = await db.from('order_items').insert(itemsRows);
     if (itemsErr) throw itemsErr;
   }
 
   // Upsert customer record
   let customer: Customer | null = null;
-  const { data: existing } = await supabase
+  const { data: existing } = await db
     .from('customers')
     .select('*')
     .eq('store_id', input.store_id)
@@ -262,7 +262,7 @@ export async function createOrder(input: {
     .maybeSingle();
 
   if (existing) {
-    const { data: updated, error: updErr } = await supabase
+    const { data: updated, error: updErr } = await db
       .from('customers')
       .update({
         total_spent_cents: (existing as Customer).total_spent_cents + input.total_cents,
@@ -274,7 +274,7 @@ export async function createOrder(input: {
     if (updErr) throw updErr;
     customer = updated as Customer;
   } else {
-    const { data: created, error: createErr } = await supabase
+    const { data: created, error: createErr } = await db
       .from('customers')
       .insert({
         store_id: input.store_id,
@@ -292,14 +292,14 @@ export async function createOrder(input: {
 
   // Update coupon usage
   if (input.coupon_code) {
-    const { data: coupon } = await supabase
+    const { data: coupon } = await db
       .from('coupons')
       .select('*')
       .eq('store_id', input.store_id)
       .eq('code', input.coupon_code)
       .maybeSingle();
     if (coupon) {
-      await supabase
+      await db
         .from('coupons')
         .update({ used_count: (coupon as Coupon).used_count + 1 })
         .eq('id', (coupon as Coupon).id);
@@ -312,14 +312,14 @@ export async function createOrder(input: {
 export async function updateOrderStatus(id: string, status: string, paymentStatus?: string): Promise<Order> {
   const patch: Record<string, unknown> = { status };
   if (paymentStatus) patch.payment_status = paymentStatus;
-  const { data, error } = await supabase.from('orders').update(patch).eq('id', id).select().single();
+  const { data, error } = await db.from('orders').update(patch).eq('id', id).select().single();
   if (error) throw error;
   return data as Order;
 }
 
 // ---------- Customers ----------
 export async function listCustomers(storeId: string): Promise<Customer[]> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('customers')
     .select('*')
     .eq('store_id', storeId)
@@ -330,7 +330,7 @@ export async function listCustomers(storeId: string): Promise<Customer[]> {
 
 // ---------- Coupons ----------
 export async function listCoupons(storeId: string): Promise<Coupon[]> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('coupons')
     .select('*')
     .eq('store_id', storeId)
@@ -340,7 +340,7 @@ export async function listCoupons(storeId: string): Promise<Coupon[]> {
 }
 
 export async function createCoupon(storeId: string, input: Partial<Coupon>): Promise<Coupon> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('coupons')
     .insert({
       store_id: storeId,
@@ -359,18 +359,18 @@ export async function createCoupon(storeId: string, input: Partial<Coupon>): Pro
 }
 
 export async function updateCoupon(id: string, patch: Partial<Coupon>): Promise<Coupon> {
-  const { data, error } = await supabase.from('coupons').update(patch).eq('id', id).select().single();
+  const { data, error } = await db.from('coupons').update(patch).eq('id', id).select().single();
   if (error) throw error;
   return data as Coupon;
 }
 
 export async function deleteCoupon(id: string): Promise<void> {
-  const { error } = await supabase.from('coupons').delete().eq('id', id);
+  const { error } = await db.from('coupons').delete().eq('id', id);
   if (error) throw error;
 }
 
 export async function validateCoupon(storeId: string, code: string): Promise<{ valid: boolean; coupon: Coupon | null; message: string }> {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('coupons')
     .select('*')
     .eq('store_id', storeId)
@@ -425,7 +425,7 @@ export const DEFAULT_BLOCKS: StorefrontBlock[] = [
 ];
 
 export async function getStorefront(storeId: string): Promise<Storefront | null> {
-  const { data, error } = await supabase.from('storefronts').select('*').eq('store_id', storeId).maybeSingle();
+  const { data, error } = await db.from('storefronts').select('*').eq('store_id', storeId).maybeSingle();
   if (error) throw error;
   return data as Storefront | null;
 }
@@ -433,7 +433,7 @@ export async function getStorefront(storeId: string): Promise<Storefront | null>
 export async function ensureStorefront(storeId: string): Promise<Storefront> {
   const existing = await getStorefront(storeId);
   if (existing) return existing;
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('storefronts')
     .insert({
       store_id: storeId,
@@ -449,7 +449,7 @@ export async function ensureStorefront(storeId: string): Promise<Storefront> {
 export async function saveStorefront(storeId: string, theme: StorefrontTheme, blocks: StorefrontBlock[]): Promise<Storefront> {
   const existing = await getStorefront(storeId);
   if (existing) {
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('storefronts')
       .update({ theme, blocks })
       .eq('store_id', storeId)
@@ -458,7 +458,7 @@ export async function saveStorefront(storeId: string, theme: StorefrontTheme, bl
     if (error) throw error;
     return data as Storefront;
   }
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('storefronts')
     .insert({ store_id: storeId, theme, blocks })
     .select()
@@ -470,7 +470,7 @@ export async function saveStorefront(storeId: string, theme: StorefrontTheme, bl
 export async function publishStorefront(storeId: string, theme: StorefrontTheme, blocks: StorefrontBlock[]): Promise<Storefront> {
   const existing = await getStorefront(storeId);
   if (existing) {
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('storefronts')
       .update({
         theme,
@@ -484,7 +484,7 @@ export async function publishStorefront(storeId: string, theme: StorefrontTheme,
     if (error) throw error;
     return data as Storefront;
   }
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('storefronts')
     .insert({
       store_id: storeId,
@@ -501,7 +501,7 @@ export async function publishStorefront(storeId: string, theme: StorefrontTheme,
 
 // ---------- Refunds ----------
 export async function listRefunds(storeId: string) {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('refunds')
     .select('*')
     .eq('store_id', storeId)
@@ -511,7 +511,7 @@ export async function listRefunds(storeId: string) {
 }
 
 export async function createRefund(orderId: string, storeId: string, amountCents: number, reason: string) {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('refunds')
     .insert({ order_id: orderId, store_id: storeId, amount_cents: amountCents, reason, status: 'approved' })
     .select()
@@ -525,7 +525,7 @@ export async function createRefund(orderId: string, storeId: string, amountCents
 export async function trackEvent(storeId: string, eventType: string, meta: Record<string, unknown> = {}) {
   const visitorId = getVisitorId();
   const sessionId = getSessionId();
-  await supabase.from('analytics_events').insert({
+  await db.from('analytics_events').insert({
     store_id: storeId,
     event_type: eventType,
     visitor_id: visitorId,
@@ -538,7 +538,7 @@ export async function trackEvent(storeId: string, eventType: string, meta: Recor
 export async function listAnalytics(storeId: string, days = 30) {
   const since = new Date();
   since.setDate(since.getDate() - days);
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('analytics_events')
     .select('*')
     .eq('store_id', storeId)
@@ -571,7 +571,7 @@ function getSessionId(): string {
 
 // ---------- AI Mocks ----------
 export async function listAiMocks(storeId: string) {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('ai_mocks')
     .select('*')
     .eq('store_id', storeId)
@@ -581,7 +581,7 @@ export async function listAiMocks(storeId: string) {
 }
 
 export async function createAiMock(storeId: string, prompt: string, style: string) {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('ai_mocks')
     .insert({ store_id: storeId, prompt, style, status: 'pending' })
     .select()
@@ -591,19 +591,19 @@ export async function createAiMock(storeId: string, prompt: string, style: strin
 }
 
 export async function updateAiMock(id: string, patch: { status: string; result_url?: string }) {
-  const { data, error } = await supabase.from('ai_mocks').update(patch).eq('id', id).select().single();
+  const { data, error } = await db.from('ai_mocks').update(patch).eq('id', id).select().single();
   if (error) throw error;
   return data;
 }
 
 export async function deleteAiMock(id: string) {
-  const { error } = await supabase.from('ai_mocks').delete().eq('id', id);
+  const { error } = await db.from('ai_mocks').delete().eq('id', id);
   if (error) throw error;
 }
 
 // ---------- Marketing ----------
 export async function listCampaigns(storeId: string) {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('marketing_campaigns')
     .select('*')
     .eq('store_id', storeId)
@@ -613,7 +613,7 @@ export async function listCampaigns(storeId: string) {
 }
 
 export async function createCampaign(storeId: string, input: { name: string; subject: string; body: string; audience: string }) {
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('marketing_campaigns')
     .insert({
       store_id: storeId,
@@ -630,13 +630,13 @@ export async function createCampaign(storeId: string, input: { name: string; sub
 }
 
 export async function updateCampaign(id: string, patch: Record<string, unknown>) {
-  const { data, error } = await supabase.from('marketing_campaigns').update(patch).eq('id', id).select().single();
+  const { data, error } = await db.from('marketing_campaigns').update(patch).eq('id', id).select().single();
   if (error) throw error;
   return data;
 }
 
 export async function deleteCampaign(id: string) {
-  const { error } = await supabase.from('marketing_campaigns').delete().eq('id', id);
+  const { error } = await db.from('marketing_campaigns').delete().eq('id', id);
   if (error) throw error;
 }
 
@@ -645,7 +645,7 @@ export async function sendCampaign(id: string, storeId: string) {
   const sentCount = customers.length;
   const openCount = Math.floor(sentCount * 0.42);
   const clickCount = Math.floor(sentCount * 0.18);
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from('marketing_campaigns')
     .update({ status: 'sent', sent_count: sentCount, open_count: openCount, click_count: clickCount })
     .eq('id', id)

@@ -46,7 +46,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
       setFiles(f);
       if (store && p) {
         const allOrders = await listOrders(store.id);
-        setOrders(allOrders.filter((o) => o.items?.some?.(() => false) || false));
+        setOrders(allOrders.filter(() => false));
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Échec du chargement du produit');

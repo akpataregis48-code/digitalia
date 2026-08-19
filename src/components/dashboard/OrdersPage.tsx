@@ -131,7 +131,7 @@ export function OrdersPage() {
                       </span>
                     </td>
                     <td className="px-5 py-3.5 text-sm text-slate-500 capitalize">
-                      {paymentMethodLabel(order.payment_method)}
+                      {paymentMethodLabel(order.payment_method ?? undefined)}
                     </td>
                     <td className="px-5 py-3.5 text-sm font-semibold text-right">{formatCurrency(order.total_cents)}</td>
                     <td className="px-5 py-3.5 text-sm text-slate-400 text-right">{formatRelative(order.created_at)}</td>

@@ -23,7 +23,7 @@ export function Input({ label, error, hint, prefix, className, id, ...rest }: In
         )}
         <input
           id={inputId}
-          className={classNames('input', prefix && 'pl-10', error && 'border-red-300 focus:border-red-400 focus:ring-red-400/15', className)}
+          className={classNames('input', prefix ? 'pl-10' : undefined, error && 'border-red-300 focus:border-red-400 focus:ring-red-400/15', className)}
           {...rest}
         />
       </div>

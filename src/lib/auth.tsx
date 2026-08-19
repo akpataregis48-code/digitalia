@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
-import { supabase } from './supabase';
+import { supabase, data as db } from './supabase';
 import type { Profile, Session, User } from './auth-types';
 
 type AuthContextValue = {
@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const loadProfile = useCallback(async (userId: string) => {
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('profiles')
       .select('*')
       .eq('id', userId)
@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     if (error) return { error: error.message };
     if (data.user) {
-      const { error: profileErr } = await supabase.from('profiles').upsert({
+      const { error: profileErr } = await db.from('profiles').upsert({
         id: data.user.id,
         email,
         full_name: fullName,
@@ -116,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const updateProfile = useCallback(
     async (patch: Partial<Profile>) => {
       if (!user) return { error: 'Non authentifié' };
-      const { data, error } = await supabase
+      const { data, error } = await db
         .from('profiles')
         .update(patch)
         .eq('id', user.id)

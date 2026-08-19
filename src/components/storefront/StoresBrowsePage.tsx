@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from '@/lib/router';
-import { supabase } from '@/lib/supabase';
+import { data as db } from '@/lib/supabase';
 import type { Store } from '@/lib/types';
 import { LoadingPage, EmptyState, ErrorState } from '@/components/ui/Feedback';
 import { MarketingHeader, MarketingFooter } from '@/components/marketing/MarketingChrome';
@@ -16,7 +16,7 @@ export function StoresBrowsePage() {
   useEffect(() => {
     (async () => {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await db
           .from('stores')
           .select('*')
           .eq('published', true)

@@ -8,17 +8,24 @@ type RouterContextValue = {
 
 const RouterContext = createContext<RouterContextValue | null>(null);
 
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+export function stripBase(p: string): string {
+  if (BASE && p.startsWith(BASE)) return p.slice(BASE.length) || '/';
+  return p;
+}
+
 export function RouterProvider({ children }: { children: ReactNode }) {
-  const [path, setPath] = useState(() => window.location.pathname + window.location.search);
+  const [path, setPath] = useState(() => stripBase(window.location.pathname) + window.location.search);
 
   useEffect(() => {
-    const onPop = () => setPath(window.location.pathname + window.location.search);
+    const onPop = () => setPath(stripBase(window.location.pathname) + window.location.search);
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
   const navigate = (to: string, opts?: { replace?: boolean }) => {
-    if (to === window.location.pathname + window.location.search) return;
+    if (to === stripBase(window.location.pathname) + window.location.search) return;
     if (opts?.replace) {
       window.history.replaceState({}, '', to);
     } else {

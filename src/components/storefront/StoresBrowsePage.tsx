@@ -24,7 +24,7 @@ export function StoresBrowsePage() {
         if (error) throw error;
         setStores((data || []) as Store[]);
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Failed to load stores');
+        setError(e instanceof Error ? e.message : 'Échec du chargement des boutiques');
       }
       setLoading(false);
     })();
@@ -45,8 +45,8 @@ export function StoresBrowsePage() {
       <MarketingHeader />
       <div className="max-w-container mx-auto px-5 lg:px-8 py-12">
         <div className="text-center mb-10">
-          <h1 className="text-h2 mb-3">Browse stores</h1>
-          <p className="text-slate-500 max-w-lg mx-auto">Discover digital products from creators around the world.</p>
+          <h1 className="text-h2 mb-3">Parcourir les boutiques</h1>
+          <p className="text-slate-500 max-w-lg mx-auto">Découvrez les produits numériques de créateurs du monde entier.</p>
         </div>
 
         <div className="relative max-w-md mx-auto mb-8">
@@ -55,19 +55,19 @@ export function StoresBrowsePage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="input pl-10"
-            placeholder="Search stores..."
+            placeholder="Rechercher des boutiques..."
           />
         </div>
 
         {loading ? (
-          <LoadingPage label="Loading stores..." />
+          <LoadingPage label="Chargement des boutiques..." />
         ) : error ? (
           <ErrorState message={error} />
         ) : filtered.length === 0 ? (
           <EmptyState
             icon={<Sparkles className="h-7 w-7" />}
-            title={stores.length === 0 ? 'No stores yet' : 'No matches'}
-            description={stores.length === 0 ? 'Be the first to publish a store!' : 'Try a different search.'}
+            title={stores.length === 0 ? 'Aucune boutique pour le moment' : 'Aucun résultat'}
+            description={stores.length === 0 ? 'Soyez le premier à publier une boutique !' : 'Essayez une autre recherche.'}
           />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -75,7 +75,7 @@ export function StoresBrowsePage() {
               <button
                 key={store.id}
                 onClick={() => navigate(`/store/${store.slug}`)}
-                className="group card p-5 text-left hover:shadow-card transition-all"
+                className="group card card-hover p-5 text-left"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="h-12 w-12 rounded-xl overflow-hidden bg-gradient-to-br from-turquoise-400 to-sky-400 flex items-center justify-center shrink-0">
@@ -96,7 +96,7 @@ export function StoresBrowsePage() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-slate-400">digitalia.store/{store.slug}</span>
                   <span className="flex items-center gap-1 text-turquoise-600 font-medium group-hover:gap-2 transition-all">
-                    Visit <ArrowRight className="h-3.5 w-3.5" />
+                    Visiter <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
               </button>

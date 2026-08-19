@@ -1,11 +1,13 @@
+import { useState } from 'react';
 import { useRouter } from '@/lib/router';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Menu, X } from 'lucide-react';
 
 export function MarketingHeader() {
   const { navigate } = useRouter();
+  const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-cream/80 backdrop-blur-lg border-b border-slate-100">
+    <header className="sticky top-0 z-40 bg-cream/80 backdrop-blur-md border-b border-slate-100 shadow-soft">
       <div className="max-w-container mx-auto px-5 lg:px-8 h-16 flex items-center justify-between">
         <button onClick={() => navigate('/')} className="flex items-center gap-2.5">
           <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-turquoise-400 to-sky-400 flex items-center justify-center shadow-soft">
@@ -15,21 +17,41 @@ export function MarketingHeader() {
         </button>
 
         <nav className="hidden md:flex items-center gap-7">
-          <button onClick={() => navigate('/#features')} className="text-sm font-medium text-slate-500 hover:text-ink transition-colors">Features</button>
-          <button onClick={() => navigate('/#builder')} className="text-sm font-medium text-slate-500 hover:text-ink transition-colors">Store Builder</button>
-          <button onClick={() => navigate('/#pricing')} className="text-sm font-medium text-slate-500 hover:text-ink transition-colors">Pricing</button>
+          <button onClick={() => navigate('/#features')} className="text-sm font-medium text-slate-500 hover:text-ink transition-colors">Fonctionnalités</button>
+          <button onClick={() => navigate('/#builder')} className="text-sm font-medium text-slate-500 hover:text-ink transition-colors">Éditeur</button>
+          <button onClick={() => navigate('/#pricing')} className="text-sm font-medium text-slate-500 hover:text-ink transition-colors">Tarifs</button>
           <button onClick={() => navigate('/#faq')} className="text-sm font-medium text-slate-500 hover:text-ink transition-colors">FAQ</button>
         </nav>
 
         <div className="flex items-center gap-2">
           <button onClick={() => navigate('/signin')} className="btn-ghost btn-sm hidden sm:inline-flex">
-            Sign in
+            Se connecter
           </button>
           <button onClick={() => navigate('/signup')} className="btn-primary btn-sm">
-            Start free
+            Commencer
+          </button>
+          <button
+            onClick={() => setOpen(!open)}
+            className="md:hidden h-9 w-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors"
+            aria-label="Menu"
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
       </div>
+
+      {open && (
+        <div className="md:hidden border-t border-slate-100 bg-cream/95 backdrop-blur-md px-5 py-4 space-y-1 shadow-lift">
+          <button onClick={() => { navigate('/#features'); setOpen(false); }} className="block w-full text-left text-sm font-medium text-slate-500 hover:text-ink py-2 transition-colors">Fonctionnalités</button>
+          <button onClick={() => { navigate('/#builder'); setOpen(false); }} className="block w-full text-left text-sm font-medium text-slate-500 hover:text-ink py-2 transition-colors">Éditeur</button>
+          <button onClick={() => { navigate('/#pricing'); setOpen(false); }} className="block w-full text-left text-sm font-medium text-slate-500 hover:text-ink py-2 transition-colors">Tarifs</button>
+          <button onClick={() => { navigate('/#faq'); setOpen(false); }} className="block w-full text-left text-sm font-medium text-slate-500 hover:text-ink py-2 transition-colors">FAQ</button>
+          <div className="pt-2 flex gap-2">
+            <button onClick={() => { navigate('/signin'); setOpen(false); }} className="btn-ghost btn-sm flex-1">Se connecter</button>
+            <button onClick={() => { navigate('/signup'); setOpen(false); }} className="btn-primary btn-sm flex-1">Commencer</button>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
@@ -39,27 +61,27 @@ export function MarketingFooter() {
 
   const cols = [
     {
-      title: 'Product',
+      title: 'Produit',
       links: [
-        { label: 'Features', to: '/#features' },
-        { label: 'Store Builder', to: '/#builder' },
-        { label: 'Pricing', to: '/#pricing' },
+        { label: 'Fonctionnalités', to: '/#features' },
+        { label: 'Éditeur de boutique', to: '/#builder' },
+        { label: 'Tarifs', to: '/#pricing' },
         { label: 'AI Mock Studio', to: '/#ai' },
       ],
     },
     {
-      title: 'Sellers',
+      title: 'Vendeurs',
       links: [
-        { label: 'Start selling', to: '/signup' },
-        { label: 'Sign in', to: '/signin' },
-        { label: 'Dashboard', to: '/dashboard' },
+        { label: 'Commencer à vendre', to: '/signup' },
+        { label: 'Se connecter', to: '/signin' },
+        { label: 'Tableau de bord', to: '/dashboard' },
       ],
     },
     {
-      title: 'Resources',
+      title: 'Ressources',
       links: [
         { label: 'FAQ', to: '/#faq' },
-        { label: 'Browse stores', to: '/stores' },
+        { label: 'Parcourir les boutiques', to: '/stores' },
       ],
     },
   ];
@@ -76,7 +98,7 @@ export function MarketingFooter() {
               <span className="text-lg font-bold tracking-tight">Digitalia</span>
             </div>
             <p className="text-sm text-slate-500 max-w-xs">
-              The all-in-one platform to sell digital products. Beautiful storefronts, secure checkout, and powerful analytics.
+              La plateforme tout-en-un pour vendre des produits numériques. Belles vitrines, paiement sécurisé et statistiques puissantes.
             </p>
           </div>
           {cols.map((col) => (
@@ -98,8 +120,8 @@ export function MarketingFooter() {
           ))}
         </div>
         <div className="border-t border-slate-100 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-slate-400">© {new Date().getFullYear()} Digitalia. All rights reserved.</p>
-          <p className="text-xs text-slate-400">Built for creators, by creators.</p>
+          <p className="text-xs text-slate-400">© {new Date().getFullYear()} Digitalia. Tous droits réservés.</p>
+          <p className="text-xs text-slate-400">Créé par des créateurs, pour des créateurs.</p>
         </div>
       </div>
     </footer>

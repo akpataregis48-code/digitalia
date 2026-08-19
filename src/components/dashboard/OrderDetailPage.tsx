@@ -37,7 +37,7 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
         setRefunds(refs.filter((r: Refund) => r.order_id === orderId));
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load order');
+      setError(e instanceof Error ? e.message : 'Échec du chargement de la commande');
     }
     setLoading(false);
   };
@@ -50,19 +50,19 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
     if (!order || !store) return;
     const amount = parseInt(refundAmount || '0', 10);
     if (amount <= 0 || amount > order.total_cents) {
-      toast('Enter a valid refund amount', 'error');
+      toast('Saisissez un montant de remboursement valide', 'error');
       return;
     }
     setProcessing(true);
     try {
-      await createRefund(order.id, store.id, amount, refundReason || 'Customer request');
-      toast('Refund processed');
+      await createRefund(order.id, store.id, amount, refundReason || 'Demande du client');
+      toast('Remboursement effectué');
       setShowRefund(false);
       setRefundReason('');
       setRefundAmount('');
       load();
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to process refund', 'error');
+      toast(e instanceof Error ? e.message : 'Échec du traitement du remboursement', 'error');
     }
     setProcessing(false);
   };
@@ -72,15 +72,15 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
     try {
       const updated = await updateOrderStatus(order.id, status, paymentStatus);
       setOrder(updated);
-      toast(`Order marked as ${status}`);
+      toast(`Commande marquée comme ${status}`);
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to update', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de la mise à jour', 'error');
     }
   };
 
-  if (loading) return <LoadingPage label="Loading order..." />;
+  if (loading) return <LoadingPage label="Chargement de la commande..." />;
   if (error) return <ErrorState message={error} onRetry={load} />;
-  if (!order) return <EmptyState icon={<ShoppingBag className="h-7 w-7" />} title="Order not found" description="This order may not exist." />;
+  if (!order) return <EmptyState icon={<ShoppingBag className="h-7 w-7" />} title="Commande introuvable" description="Cette commande n'existe peut-être pas." />;
 
   return (
     <div>
@@ -89,16 +89,16 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
         className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-ink transition-colors mb-4"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to orders
+        Retour aux commandes
       </button>
 
       <DashboardPageHeader
-        title={`Order #${order.payment_ref?.slice(-8) || order.id.slice(0, 8)}`}
+        title={`Commande #${order.payment_ref?.slice(-8) || order.id.slice(0, 8)}`}
         description={formatDateTime(order.created_at)}
         action={
           order.payment_status === 'success' && order.status !== 'refunded' && (
             <Button variant="outline" onClick={() => { setRefundAmount(String(order.total_cents)); setShowRefund(true); }} icon={<RotateCcw className="h-4 w-4" />}>
-              Issue refund
+              Rembourser
             </Button>
           )
         }
@@ -108,7 +108,7 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
         <div className="lg:col-span-2 space-y-5">
           {/* Items */}
           <Card className="p-5">
-            <h3 className="text-base font-semibold mb-4">Items</h3>
+            <h3 className="text-base font-semibold mb-4">Articles</h3>
             <div className="space-y-3">
               {items.map((item) => (
                 <div key={item.id} className="flex items-center gap-4">
@@ -123,7 +123,7 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold truncate">{item.product_title}</p>
-                    <p className="text-xs text-slate-400">Qty {item.quantity}</p>
+                    <p className="text-xs text-slate-400">Qté {item.quantity}</p>
                   </div>
                   <p className="text-sm font-semibold">{formatCurrency(item.price_cents * item.quantity)}</p>
                 </div>
@@ -131,12 +131,12 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
             </div>
             <div className="border-t border-slate-100 mt-4 pt-4 space-y-2 text-sm">
               <div className="flex justify-between text-slate-500">
-                <span>Subtotal</span>
+                <span>Sous-total</span>
                 <span>{formatCurrency(order.subtotal_cents)}</span>
               </div>
               {order.discount_cents > 0 && (
                 <div className="flex justify-between text-turquoise-600">
-                  <span>Discount {order.coupon_code ? `(${order.coupon_code})` : ''}</span>
+                  <span>Remise {order.coupon_code ? `(${order.coupon_code})` : ''}</span>
                   <span>-{formatCurrency(order.discount_cents)}</span>
                 </div>
               )}
@@ -150,7 +150,7 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
           {/* Refunds */}
           {refunds.length > 0 && (
             <Card className="p-5">
-              <h3 className="text-base font-semibold mb-4">Refunds</h3>
+              <h3 className="text-base font-semibold mb-4">Remboursements</h3>
               <div className="space-y-3">
                 {refunds.map((refund) => (
                   <div key={refund.id} className="flex items-center justify-between p-3 rounded-xl bg-sky-50">
@@ -172,50 +172,50 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
         {/* Sidebar */}
         <div className="space-y-5">
           <Card className="p-5">
-            <h3 className="text-sm font-semibold mb-3">Payment</h3>
+            <h3 className="text-sm font-semibold mb-3">Paiement</h3>
             <dl className="space-y-2.5 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-400 flex items-center gap-1.5"><CreditCard className="h-3.5 w-3.5" /> Method</dt>
+                <dt className="text-slate-400 flex items-center gap-1.5"><CreditCard className="h-3.5 w-3.5" /> Méthode</dt>
                 <dd className="font-medium">{order.payment_method ? PAYMENT_METHOD_LABELS[order.payment_method] : '—'}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-400">Status</dt>
+                <dt className="text-slate-400">Statut</dt>
                 <dd><span className={PAYMENT_STATUS_COLORS[order.payment_status]}>{PAYMENT_STATUS_LABELS[order.payment_status]}</span></dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-400">Reference</dt>
+                <dt className="text-slate-400">Référence</dt>
                 <dd className="font-mono text-xs">{order.payment_ref || '—'}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-400">Order status</dt>
-                <dd><Badge variant={order.status === 'completed' ? 'success' : order.status === 'refunded' ? 'sky' : 'warning'}>{order.status}</Badge></dd>
+                <dt className="text-slate-400">Statut de la commande</dt>
+                <dd><Badge variant={order.status === 'completed' ? 'success' : order.status === 'refunded' ? 'sky' : 'warning'}>{order.status === 'completed' ? 'terminée' : order.status === 'refunded' ? 'remboursée' : 'en attente'}</Badge></dd>
               </div>
             </dl>
 
             {order.status === 'pending' && (
               <div className="mt-4 flex gap-2">
-                <Button size="sm" className="flex-1" onClick={() => handleUpdateStatus('completed', 'success')}>Mark paid</Button>
-                <Button size="sm" variant="outline" onClick={() => handleUpdateStatus('cancelled', 'cancelled')}>Cancel</Button>
+                <Button size="sm" className="flex-1" onClick={() => handleUpdateStatus('completed', 'success')}>Marquer payée</Button>
+                <Button size="sm" variant="outline" onClick={() => handleUpdateStatus('cancelled', 'cancelled')}>Annuler</Button>
               </div>
             )}
           </Card>
 
           <Card className="p-5">
-            <h3 className="text-sm font-semibold mb-3">Customer</h3>
+            <h3 className="text-sm font-semibold mb-3">Client</h3>
             <dl className="space-y-2.5 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-400 flex items-center gap-1.5"><Mail className="h-3.5 w-3.5" /> Email</dt>
+                <dt className="text-slate-400 flex items-center gap-1.5"><Mail className="h-3.5 w-3.5" /> E-mail</dt>
                 <dd className="font-medium truncate max-w-[160px]">{order.customer_email}</dd>
               </div>
               {order.customer_name && (
                 <div className="flex justify-between">
-                  <dt className="text-slate-400">Name</dt>
+                  <dt className="text-slate-400">Nom</dt>
                   <dd className="font-medium">{order.customer_name}</dd>
                 </div>
               )}
               {order.country && (
                 <div className="flex justify-between">
-                  <dt className="text-slate-400 flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" /> Country</dt>
+                  <dt className="text-slate-400 flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" /> Pays</dt>
                   <dd className="font-medium">{order.country}</dd>
                 </div>
               )}
@@ -234,18 +234,18 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
       <Modal
         open={showRefund}
         onClose={() => setShowRefund(false)}
-        title="Issue refund"
-        description="The customer will be refunded the specified amount."
+        title="Rembourser"
+        description="Le client sera remboursé du montant indiqué."
         footer={
           <>
-            <Button variant="ghost" onClick={() => setShowRefund(false)}>Cancel</Button>
-            <Button onClick={handleRefund} loading={processing} disabled={processing}>Process refund</Button>
+            <Button variant="ghost" onClick={() => setShowRefund(false)}>Annuler</Button>
+            <Button onClick={handleRefund} loading={processing} disabled={processing}>Effectuer le remboursement</Button>
           </>
         }
       >
         <div className="space-y-4">
           <div>
-            <label className="label">Refund amount (cents)</label>
+            <label className="label">Montant du remboursement (centimes)</label>
             <input
               type="number"
               value={refundAmount}
@@ -253,13 +253,13 @@ export function OrderDetailPage({ orderId }: { orderId: string }) {
               className="input"
               placeholder={String(order.total_cents)}
             />
-            <p className="mt-1.5 text-xs text-slate-400">Order total: {formatCurrency(order.total_cents)}</p>
+            <p className="mt-1.5 text-xs text-slate-400">Total de la commande : {formatCurrency(order.total_cents)}</p>
           </div>
           <Textarea
-            label="Reason (optional)"
+            label="Motif (facultatif)"
             value={refundReason}
             onChange={(e) => setRefundReason(e.target.value)}
-            placeholder="Customer request, duplicate charge, etc."
+            placeholder="Demande du client, double débit, etc."
           />
         </div>
       </Modal>

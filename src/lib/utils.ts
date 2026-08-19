@@ -5,7 +5,7 @@ export function classNames(...classes: (string | false | null | undefined)[]) {
 export function formatCurrency(cents: number, currency = 'USD') {
   const value = cents / 100;
   try {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency,
       minimumFractionDigits: 2,
@@ -16,21 +16,21 @@ export function formatCurrency(cents: number, currency = 'USD') {
 }
 
 export function formatNumber(n: number) {
-  return new Intl.NumberFormat('en-US').format(n);
+  return new Intl.NumberFormat('fr-FR').format(n);
 }
 
 export function formatCompact(n: number) {
-  return new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(n);
+  return new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 }).format(n);
 }
 
 export function formatDate(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return d.toLocaleDateString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 export function formatDateTime(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+  return d.toLocaleString('fr-FR', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
 }
 
 export function formatRelative(iso: string) {
@@ -38,13 +38,13 @@ export function formatRelative(iso: string) {
   const now = new Date();
   const diff = now.getTime() - d.getTime();
   const sec = Math.floor(diff / 1000);
-  if (sec < 60) return 'just now';
+  if (sec < 60) return 'à l’instant';
   const min = Math.floor(sec / 60);
-  if (min < 60) return `${min}m ago`;
+  if (min < 60) return `il y a ${min} min`;
   const hr = Math.floor(min / 60);
-  if (hr < 24) return `${hr}h ago`;
+  if (hr < 24) return `il y a ${hr} h`;
   const day = Math.floor(hr / 24);
-  if (day < 7) return `${day}d ago`;
+  if (day < 7) return `il y a ${day} j`;
   return formatDate(iso);
 }
 

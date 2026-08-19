@@ -22,7 +22,7 @@ export function CustomersPage() {
       const data = await listCustomers(store.id);
       setCustomers(data);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load customers');
+      setError(e instanceof Error ? e.message : 'Échec du chargement des clients');
     }
     setLoading(false);
   };
@@ -40,24 +40,24 @@ export function CustomersPage() {
   const totalRevenue = customers.reduce((sum, c) => sum + c.total_spent_cents, 0);
   const avgOrder = customers.length > 0 ? totalRevenue / customers.reduce((s, c) => s + c.orders_count, 0) : 0;
 
-  if (loading) return <LoadingPage label="Loading customers..." />;
+  if (loading) return <LoadingPage label="Chargement des clients..." />;
   if (error) return <ErrorState message={error} onRetry={load} />;
 
   return (
     <div>
-      <DashboardPageHeader title="Customers" description={`${customers.length} customers`} />
+      <DashboardPageHeader title="Clients" description={`${customers.length} client(s)`} />
 
       <div className="grid grid-cols-3 gap-4 mb-5">
         <Card className="p-4">
-          <p className="text-xs text-slate-400 mb-1">Total revenue</p>
+          <p className="text-xs text-slate-400 mb-1">Revenus totaux</p>
           <p className="text-xl font-bold text-turquoise-600">{formatCurrency(totalRevenue)}</p>
         </Card>
         <Card className="p-4">
-          <p className="text-xs text-slate-400 mb-1">Total orders</p>
+          <p className="text-xs text-slate-400 mb-1">Commandes totales</p>
           <p className="text-xl font-bold text-sky-600">{customers.reduce((s, c) => s + c.orders_count, 0)}</p>
         </Card>
         <Card className="p-4">
-          <p className="text-xs text-slate-400 mb-1">Avg order value</p>
+          <p className="text-xs text-slate-400 mb-1">Panier moyen</p>
           <p className="text-xl font-bold text-orange-600">{formatCurrency(avgOrder)}</p>
         </Card>
       </div>
@@ -69,7 +69,7 @@ export function CustomersPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="input pl-10"
-            placeholder="Search customers..."
+            placeholder="Rechercher des clients..."
           />
         </div>
       </div>
@@ -78,19 +78,19 @@ export function CustomersPage() {
         {filtered.length === 0 ? (
           <EmptyState
             icon={<Users className="h-7 w-7" />}
-            title={customers.length === 0 ? 'No customers yet' : 'No matches'}
-            description={customers.length === 0 ? 'Customers appear here automatically when they place orders.' : 'Try a different search.'}
+            title={customers.length === 0 ? 'Aucun client pour le moment' : 'Aucun résultat'}
+            description={customers.length === 0 ? 'Les clients apparaissent ici automatiquement lorsqu’ils passent commande.' : 'Essayez une autre recherche.'}
           />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px]">
               <thead className="bg-slate-50/50">
                 <tr>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Customer</th>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Location</th>
-                  <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Orders</th>
-                  <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Spent</th>
-                  <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Since</th>
+                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Client</th>
+                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Localisation</th>
+                  <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Commandes</th>
+                  <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Dépensé</th>
+                  <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Depuis</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">

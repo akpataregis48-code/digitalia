@@ -63,9 +63,10 @@ export default {
         h4: ['1.25rem', { lineHeight: '1.3', fontWeight: '600' }],
       },
       boxShadow: {
-        soft: '0 1px 2px rgba(17,17,17,0.04), 0 4px 12px rgba(17,17,17,0.04)',
-        card: '0 1px 3px rgba(17,17,17,0.05), 0 8px 24px rgba(17,17,17,0.06)',
-        lift: '0 2px 6px rgba(17,17,17,0.06), 0 16px 40px rgba(17,17,17,0.08)',
+        soft: '0 1px 2px rgba(17,17,17,0.03), 0 2px 8px rgba(17,17,17,0.04)',
+        card: '0 1px 2px rgba(17,17,17,0.04), 0 4px 12px rgba(17,17,17,0.05), 0 12px 32px rgba(17,17,17,0.04)',
+        lift: '0 2px 4px rgba(17,17,17,0.04), 0 8px 20px rgba(17,17,17,0.06), 0 20px 48px rgba(17,17,17,0.06)',
+        float: '0 2px 6px rgba(17,17,17,0.05), 0 12px 28px rgba(17,17,17,0.08), 0 32px 80px rgba(17,17,17,0.10)',
         ring: '0 0 0 3px rgba(69,199,178,0.25)',
         orange: '0 8px 20px rgba(255,138,61,0.3)',
       },

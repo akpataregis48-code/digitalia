@@ -80,14 +80,14 @@ function BlockRenderer({
               {block.title}
             </h2>
             {products.length === 0 ? (
-              <p className="text-center text-slate-400 py-12">No products available yet.</p>
+              <p className="text-center text-slate-400 py-12">Aucun produit disponible pour le moment.</p>
             ) : (
               <div className="grid gap-5" style={{ gridTemplateColumns: `repeat(${block.columns}, minmax(0, 1fr))` }}>
                 {products.slice(0, block.limit).map((product) => (
                   <button
                     key={product.id}
                     onClick={() => onProductClick(product)}
-                    className="text-left group bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-card transition-all"
+                    className="text-left group bg-white rounded-2xl border border-slate-100 overflow-hidden card-hover"
                     style={{ borderRadius: `${theme.radius}px` }}
                   >
                     <div className="aspect-[4/3] bg-slate-100 overflow-hidden">
@@ -168,7 +168,7 @@ function BlockRenderer({
               />
             ) : (
               <div className="w-full h-64 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400">
-                Image placeholder
+                Emplacement d'image
               </div>
             )}
             {block.caption && <p className="text-sm text-slate-400 text-center mt-3">{block.caption}</p>}
@@ -232,7 +232,7 @@ export function StorefrontFooter({ store }: { store: Store }) {
               {store.contact_email && <p className="text-xs text-slate-400">{store.contact_email}</p>}
             </div>
           </div>
-          <p className="text-xs text-slate-400">Powered by Digitalia</p>
+          <p className="text-xs text-slate-400">Propulsé par Digitalia</p>
         </div>
       </div>
     </footer>

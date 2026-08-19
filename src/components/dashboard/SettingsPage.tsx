@@ -64,10 +64,10 @@ export function SettingsPage() {
         contact_email: contactEmail || null,
         published,
       });
-      await refresh();
-      toast('Store settings saved');
+await refresh();
+      toast('Paramètres de la boutique enregistrés');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to save', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de l’enregistrement', 'error');
     }
     setSaving(false);
   };
@@ -76,17 +76,17 @@ export function SettingsPage() {
     if (!profile) return;
     try {
       await updateProfile({ full_name: fullName });
-      toast('Profile updated');
+      toast('Profil mis à jour');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to update', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de la mise à jour', 'error');
     }
   };
 
-  if (loading) return <LoadingPage label="Loading settings..." />;
+  if (loading) return <LoadingPage label="Chargement des paramètres..." />;
 
   return (
     <div>
-      <DashboardPageHeader title="Settings" description="Manage your store and account" />
+      <DashboardPageHeader title="Paramètres" description="Gérez votre boutique et votre compte" />
 
       <div className="space-y-5 max-w-3xl">
         {/* Store profile */}
@@ -96,28 +96,28 @@ export function SettingsPage() {
               <Store className="h-5 w-5 text-turquoise-500" />
             </div>
             <div>
-              <h3 className="text-base font-semibold">Store profile</h3>
-              <p className="text-sm text-slate-400">How your store appears publicly</p>
+              <h3 className="text-base font-semibold">Profil de la boutique</h3>
+              <p className="text-sm text-slate-400">Comment votre boutique apparaît publiquement</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
-              <Input label="Store name" value={name} onChange={(e) => setName(e.target.value)} />
-              <Input label="Store URL" value={slug} onChange={(e) => setSlug(slugify(e.target.value))} prefix={<span className="text-xs text-slate-400">digitalia.store/</span>} />
+              <Input label="Nom de la boutique" value={name} onChange={(e) => setName(e.target.value)} />
+              <Input label="URL de la boutique" value={slug} onChange={(e) => setSlug(slugify(e.target.value))} prefix={<span className="text-xs text-slate-400">digitalia.store/</span>} />
             </div>
-            <Input label="Tagline" value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder="Premium digital products" />
+            <Input label="Slogan" value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder="Produits numériques premium" />
             <Textarea label="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
             <div className="grid sm:grid-cols-2 gap-4">
-              <Input label="Logo URL" value={logoUrl} onChange={(e) => setLogoUrl(e.target.value)} placeholder="https://..." />
-              <Input label="Cover image URL" value={coverUrl} onChange={(e) => setCoverUrl(e.target.value)} placeholder="https://..." />
+              <Input label="URL du logo" value={logoUrl} onChange={(e) => setLogoUrl(e.target.value)} placeholder="https://..." />
+              <Input label="URL de l'image de couverture" value={coverUrl} onChange={(e) => setCoverUrl(e.target.value)} placeholder="https://..." />
             </div>
-            <Input label="Contact email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} type="email" />
+            <Input label="E-mail de contact" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} type="email" />
 
             <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50">
               <div>
-                <p className="text-sm font-semibold">Store published</p>
-                <p className="text-xs text-slate-400">When published, your store is visible to everyone</p>
+                <p className="text-sm font-semibold">Boutique publiée</p>
+                <p className="text-xs text-slate-400">Une fois publiée, votre boutique est visible par tous</p>
               </div>
               <button
                 onClick={() => setPublished(!published)}
@@ -133,21 +133,41 @@ export function SettingsPage() {
 
             <div className="flex items-center gap-3 pt-2">
               <Button onClick={handleSaveStore} loading={saving} icon={<Save className="h-4 w-4" />}>
-                Save store
+                Enregistrer la boutique
               </Button>
               <Button
                 variant="outline"
                 onClick={() => navigate(`/store/${slug}`)}
                 icon={<ExternalLink className="h-4 w-4" />}
               >
-                View store
+                Voir la boutique
               </Button>
               {store?.published ? (
-                <Badge variant="success"><Check className="h-3 w-3" /> Published</Badge>
+                <Badge variant="success"><Check className="h-3 w-3" /> Publiée</Badge>
               ) : (
-                <Badge variant="warning">Unpublished</Badge>
+                <Badge variant="warning">Non publiée</Badge>
               )}
             </div>
+          </div>
+        </Card>
+
+        {/* Account */}
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="h-10 w-10 rounded-xl bg-sky-50 flex items-center justify-center">
+              <Globe className="h-5 w-5 text-sky-500" />
+            </div>
+            <div>
+              <h3 className="text-base font-semibold">Compte</h3>
+              <p className="text-sm text-slate-400">Vos informations personnelles</p>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <Input label="Nom complet" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+            <Input label="E-mail" value={profile?.email || ''} disabled hint="L'e-mail ne peut pas être modifié" />
+            <Button onClick={handleSaveProfile} variant="outline" icon={<Save className="h-4 w-4" />}>
+              Enregistrer le profil
+            </Button>
           </div>
         </Card>
 

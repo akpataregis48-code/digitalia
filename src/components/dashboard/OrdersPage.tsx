@@ -9,6 +9,7 @@ import { LoadingPage, EmptyState, ErrorState } from '@/components/ui/Feedback';
 import { formatCurrency, formatRelative } from '@/lib/utils';
 import { PAYMENT_STATUS_COLORS } from '@/lib/payment';
 import { ShoppingBag, Search } from 'lucide-react';
+import { paymentStatusLabel, paymentMethodLabel } from '@/lib/payment';
 
 export function OrdersPage() {
   const { store } = useStore();
@@ -26,7 +27,7 @@ export function OrdersPage() {
       const data = await listOrders(store.id);
       setOrders(data);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load orders');
+      setError(e instanceof Error ? e.message : 'Échec du chargement des commandes');
     }
     setLoading(false);
   };
@@ -59,12 +60,12 @@ export function OrdersPage() {
     refunded: orders.filter((o) => o.status === 'refunded').length,
   };
 
-  if (loading) return <LoadingPage label="Loading orders..." />;
+  if (loading) return <LoadingPage label="Chargement des commandes..." />;
   if (error) return <ErrorState message={error} onRetry={load} />;
 
   return (
     <div>
-      <DashboardPageHeader title="Orders" description={`${orders.length} total orders`} />
+      <DashboardPageHeader title="Commandes" description={`${orders.length} commande(s) au total`} />
 
       <div className="mb-4">
         <div className="relative max-w-sm">
@@ -73,18 +74,18 @@ export function OrdersPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="input pl-10"
-            placeholder="Search by email, name, or ref..."
+            placeholder="Rechercher par e-mail, nom ou référence..."
           />
         </div>
       </div>
 
       <Tabs
         tabs={[
-          { value: 'all', label: 'All', count: counts.all },
-          { value: 'completed', label: 'Completed', count: counts.completed },
-          { value: 'pending', label: 'Pending', count: counts.pending },
-          { value: 'failed', label: 'Failed', count: counts.failed },
-          { value: 'refunded', label: 'Refunded', count: counts.refunded },
+          { value: 'all', label: 'Toutes', count: counts.all },
+          { value: 'completed', label: 'Terminées', count: counts.completed },
+          { value: 'pending', label: 'En attente', count: counts.pending },
+          { value: 'failed', label: 'Échouées', count: counts.failed },
+          { value: 'refunded', label: 'Remboursées', count: counts.refunded },
         ]}
         active={tab}
         onChange={setTab}
@@ -94,18 +95,18 @@ export function OrdersPage() {
         {filtered.length === 0 ? (
           <EmptyState
             icon={<ShoppingBag className="h-7 w-7" />}
-            title={orders.length === 0 ? 'No orders yet' : 'No matching orders'}
-            description={orders.length === 0 ? 'Orders from your storefront will appear here.' : 'Try a different filter or search.'}
+            title={orders.length === 0 ? 'Aucune commande pour le moment' : 'Aucune commande correspondante'}
+            description={orders.length === 0 ? 'Les commandes de votre vitrine apparaîtront ici.' : 'Essayez un autre filtre ou une autre recherche.'}
           />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[680px]">
               <thead className="bg-slate-50/50">
                 <tr>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Order</th>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Customer</th>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Payment</th>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Method</th>
+                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Commande</th>
+                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Client</th>
+                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Paiement</th>
+                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Méthode</th>
                   <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Total</th>
                   <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider px-5 py-3">Date</th>
                 </tr>
@@ -126,11 +127,11 @@ export function OrdersPage() {
                     </td>
                     <td className="px-5 py-3.5">
                       <span className={PAYMENT_STATUS_COLORS[order.payment_status]}>
-                        {order.payment_status.replace(/_/g, ' ')}
+                        {paymentStatusLabel(order.payment_status)}
                       </span>
                     </td>
                     <td className="px-5 py-3.5 text-sm text-slate-500 capitalize">
-                      {order.payment_method?.replace(/_/g, ' ') || '—'}
+                      {paymentMethodLabel(order.payment_method)}
                     </td>
                     <td className="px-5 py-3.5 text-sm font-semibold text-right">{formatCurrency(order.total_cents)}</td>
                     <td className="px-5 py-3.5 text-sm text-slate-400 text-right">{formatRelative(order.created_at)}</td>

@@ -5,7 +5,7 @@ export function Spinner({ size = 20, className }: { size?: number; className?: s
   return <Loader2 className={className} style={{ width: size, height: size }} />;
 }
 
-export function LoadingPage({ label = 'Loading...' }: { label?: string }) {
+export function LoadingPage({ label = 'Chargement...' }: { label?: string }) {
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
       <Loader2 className="h-7 w-7 text-turquoise-400 animate-spin" />
@@ -54,11 +54,11 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z" />
         </svg>
       </div>
-      <h3 className="text-h4 mb-1.5">Something went wrong</h3>
+      <h3 className="text-h4 mb-1.5">Une erreur est survenue</h3>
       <p className="text-sm text-slate-500 max-w-sm mb-5">{message}</p>
       {onRetry && (
         <button onClick={onRetry} className="btn-outline">
-          Try again
+          Réessayer
         </button>
       )}
     </div>

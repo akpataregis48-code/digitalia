@@ -28,16 +28,16 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed select-none;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed select-none focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-turquoise-400/30;
   }
   .btn-primary {
-    @apply btn bg-orange-400 text-white hover:bg-orange-500 active:scale-[0.98] shadow-orange;
+    @apply btn bg-orange-400 text-ink hover:bg-orange-500 hover:shadow-lift active:scale-[0.98] active:shadow-none shadow-orange;
   }
   .btn-secondary {
-    @apply btn bg-turquoise-400 text-white hover:bg-turquoise-500 active:scale-[0.98];
+    @apply btn bg-turquoise-400 text-white hover:bg-turquoise-500 hover:shadow-lift active:scale-[0.98] active:shadow-none;
   }
   .btn-outline {
-    @apply btn border border-slate-200 bg-white text-ink hover:border-slate-300 hover:bg-slate-50;
+    @apply btn border border-slate-200 bg-white text-ink hover:border-slate-300 hover:bg-slate-50 hover:shadow-card focus-visible:ring-slate-300/40 active:scale-[0.98];
   }
   .btn-ghost {
     @apply btn text-slate-500 hover:bg-slate-50 hover:text-ink;
@@ -49,7 +49,10 @@
     @apply px-7 py-4 text-base rounded-2xl;
   }
   .card {
-    @apply bg-white border border-slate-100 rounded-2xl shadow-soft;
+    @apply bg-white border border-slate-100 rounded-2xl shadow-card;
+  }
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-lift hover:-translate-y-0.5;
   }
   .input {
     @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-slate-400 transition-all duration-200 focus:outline-none focus:border-turquoise-400 focus:ring-4 focus:ring-turquoise-400/15;

@@ -38,7 +38,7 @@ export function ProductsPage() {
       const data = await listProducts(store.id);
       setProducts(data);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load products');
+      setError(e instanceof Error ? e.message : 'Échec du chargement des produits');
     }
     setLoading(false);
   };
@@ -67,9 +67,9 @@ export function ProductsPage() {
     try {
       await deleteProduct(product.id);
       setProducts((prev) => prev.filter((p) => p.id !== product.id));
-      toast('Product deleted');
+      toast('Produit supprimé');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to delete', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de la suppression', 'error');
     }
   };
 
@@ -77,23 +77,23 @@ export function ProductsPage() {
     try {
       const updated = await updateProduct(product.id, { status });
       setProducts((prev) => prev.map((p) => (p.id === product.id ? updated : p)));
-      toast(`Product ${status}`);
+      toast(`Produit ${status === 'published' ? 'publié' : 'passé en brouillon'}`);
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to update', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de la mise à jour', 'error');
     }
   };
 
-  if (loading) return <LoadingPage label="Loading products..." />;
+  if (loading) return <LoadingPage label="Chargement des produits..." />;
   if (error) return <ErrorState message={error} onRetry={load} />;
 
   return (
     <div>
       <DashboardPageHeader
-        title="Products"
-        description={`${products.length} ${products.length === 1 ? 'product' : 'products'} in your store`}
+        title="Produits"
+        description={`${products.length} ${products.length === 1 ? 'produit' : 'produits'} dans votre boutique`}
         action={
           <Button onClick={handleCreate} icon={<Plus className="h-4 w-4" />}>
-            New product
+            Nouveau produit
           </Button>
         }
       />
@@ -106,7 +106,7 @@ export function ProductsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="input pl-10"
-            placeholder="Search products..."
+            placeholder="Rechercher des produits..."
           />
         </div>
         <div className="flex gap-2">
@@ -118,7 +118,7 @@ export function ProductsPage() {
                 filter === f ? 'bg-ink text-white' : 'bg-white border border-slate-200 text-slate-500 hover:border-slate-300'
               }`}
             >
-              {f}
+              {f === 'all' ? 'Tous' : f === 'published' ? 'Publiés' : f === 'draft' ? 'Brouillons' : 'Archivés'}
             </button>
           ))}
         </div>
@@ -129,15 +129,15 @@ export function ProductsPage() {
           {products.length === 0 ? (
             <EmptyState
               icon={<Package className="h-7 w-7" />}
-              title="No products yet"
-              description="Create your first digital product to start selling."
-              action={<Button onClick={handleCreate} icon={<Plus className="h-4 w-4" />}>New product</Button>}
+              title="Aucun produit pour le moment"
+              description="Créez votre premier produit numérique pour commencer à vendre."
+              action={<Button onClick={handleCreate} icon={<Plus className="h-4 w-4" />}>Nouveau produit</Button>}
             />
           ) : (
             <EmptyState
               icon={<Search className="h-7 w-7" />}
-              title="No matches"
-              description="Try adjusting your search or filter."
+              title="Aucun résultat"
+              description="Essayez d'ajuster votre recherche ou votre filtre."
             />
           )}
         </Card>
@@ -166,7 +166,7 @@ export function ProductsPage() {
                 </div>
               </div>
               <h3 className="text-sm font-semibold mb-1 truncate">{product.title}</h3>
-              <p className="text-xs text-slate-400 mb-3">{product.category || 'Uncategorized'}</p>
+              <p className="text-xs text-slate-400 mb-3">{product.category || 'Sans catégorie'}</p>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-base font-bold">{formatCurrency(product.price_cents)}</p>
@@ -179,7 +179,7 @@ export function ProductsPage() {
                     <button
                       onClick={() => handleQuickStatus(product, 'draft')}
                       className="h-8 w-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-ink transition-colors"
-                      title="Unpublish"
+                      title="Dépublier"
                     >
                       <EyeOff className="h-4 w-4" />
                     </button>
@@ -187,7 +187,7 @@ export function ProductsPage() {
                     <button
                       onClick={() => handleQuickStatus(product, 'published')}
                       className="h-8 w-8 rounded-lg hover:bg-turquoise-50 flex items-center justify-center text-slate-400 hover:text-turquoise-600 transition-colors"
-                      title="Publish"
+                      title="Publier"
                     >
                       <Eye className="h-4 w-4" />
                     </button>
@@ -195,14 +195,14 @@ export function ProductsPage() {
                   <button
                     onClick={() => handleEdit(product)}
                     className="h-8 w-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-ink transition-colors"
-                    title="Edit"
+                    title="Modifier"
                   >
                     <Edit2 className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => setDeleteTarget(product)}
                     className="h-8 w-8 rounded-lg hover:bg-red-50 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"
-                    title="Delete"
+                    title="Supprimer"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -233,9 +233,9 @@ export function ProductsPage() {
         open={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
         onConfirm={() => deleteTarget && handleDelete(deleteTarget)}
-        title="Delete product?"
-        message={`"${deleteTarget?.title}" will be permanently deleted. This cannot be undone.`}
-        confirmLabel="Delete"
+        title="Supprimer le produit ?"
+        message={`« ${deleteTarget?.title} » sera définitivement supprimé. Cette action est irréversible.`}
+        confirmLabel="Supprimer"
         danger
       />
     </div>
@@ -275,15 +275,15 @@ function ProductFormModal({
     e.target.value = '';
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      setUploadError('Please choose an image file (PNG, JPG, GIF, WebP...)');
+      setUploadError('Veuillez choisir un fichier image (PNG, JPG, GIF, WebP...)');
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
-      setUploadError('Image is too large — max 2 MB');
+      setUploadError('Image trop lourde — 2 Mo maximum');
       return;
     }
     const reader = new FileReader();
-    reader.onerror = () => setUploadError('Could not read the file — try another image');
+    reader.onerror = () => setUploadError('Impossible de lire le fichier — essayez une autre image');
     reader.onload = () => {
       setCoverUrl(String(reader.result));
       setUploadName(file.name);
@@ -301,7 +301,7 @@ function ProductFormModal({
   const handleSave = async () => {
     setError(null);
     if (!title.trim()) {
-      setError('Title is required');
+      setError('Le titre est requis');
       return;
     }
     setSaving(true);
@@ -320,15 +320,15 @@ function ProductFormModal({
       };
       if (product) {
         const updated = await updateProduct(product.id, payload);
-        toast('Product updated');
+        toast('Produit mis à jour');
         onSaved(updated, false);
       } else {
         const created = await createProduct(storeId, payload);
-        toast('Product created');
+        toast('Produit créé');
         onSaved(created, true);
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to save');
+      setError(e instanceof Error ? e.message : 'Échec de l’enregistrement');
     }
     setSaving(false);
   };
@@ -337,35 +337,35 @@ function ProductFormModal({
     <Modal
       open
       onClose={onClose}
-      title={product ? 'Edit product' : 'New product'}
-      description={product ? 'Update your product details' : 'Create a new digital product'}
+      title={product ? 'Modifier le produit' : 'Nouveau produit'}
+      description={product ? 'Mettez à jour les détails de votre produit' : 'Créez un nouveau produit numérique'}
       size="lg"
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>Annuler</Button>
           <Button onClick={handleSave} loading={saving} disabled={saving}>
-            {product ? 'Save changes' : 'Create product'}
+            {product ? 'Enregistrer les modifications' : 'Créer le produit'}
           </Button>
         </>
       }
     >
       <div className="space-y-4">
         <Input
-          label="Title"
+          label="Titre"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="e.g. Ultimate Logo Pack"
+          placeholder="ex. Pack de logos ultime"
         />
         <Input
-          label="URL slug"
+          label="Slug d'URL"
           value={slug}
           onChange={(e) => setSlug(slugify(e.target.value))}
-          placeholder="ultimate-logo-pack"
-          hint="Used in the product URL on your storefront"
+          placeholder="pack-de-logos-ultime"
+          hint="Utilisé dans l'URL du produit sur votre vitrine"
         />
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Price (USD)"
+            label="Prix (USD)"
             type="number"
             step="0.01"
             min="0"
@@ -375,14 +375,14 @@ function ProductFormModal({
             prefix={<span className="text-sm">$</span>}
           />
           <Input
-            label="Compare at (optional)"
+            label="Comparer à (facultatif)"
             type="number"
             step="0.01"
             min="0"
             value={compareAt}
             onChange={(e) => setCompareAt(e.target.value)}
             placeholder="49.00"
-            hint="Original price (strikethrough)"
+            hint="Prix d'origine (barré)"
             prefix={<span className="text-sm">$</span>}
           />
         </div>
@@ -390,31 +390,31 @@ function ProductFormModal({
           label="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Describe what customers get..."
+          placeholder="Décrivez ce que les clients reçoivent..."
         />
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Category"
+            label="Catégorie"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            placeholder="Templates"
+            placeholder="Modèles"
           />
           <Input
-            label="Tags (comma-separated)"
+            label="Tags (séparés par des virgules)"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
-            placeholder="design, logos, brand"
+            placeholder="design, logos, marque"
           />
         </div>
         <Input
-          label="Cover image URL"
+          label="URL de l'image de couverture"
           value={coverUrl}
           onChange={(e) => {
             setCoverUrl(e.target.value);
             setUploadName(null);
           }}
           placeholder="https://..."
-          hint="Paste an image URL for the product cover"
+          hint="Collez l'URL d'une image pour la couverture du produit"
         />
         <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
           <div className="flex items-center justify-between gap-3">
@@ -425,19 +425,19 @@ function ProductFormModal({
                   <span className="text-sm font-medium text-slate-700 truncate">{uploadName}</span>
                 </>
               ) : (
-                <p className="text-sm text-slate-500">Or upload an image from your device</p>
+                <p className="text-sm text-slate-500">Ou téléversez une image depuis votre appareil</p>
               )}
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <Button variant="secondary" size="sm" onClick={() => fileInputRef.current?.click()}>
                 <Upload className="h-4 w-4" />
-                {uploadName ? 'Replace' : 'Upload image'}
+                {uploadName ? 'Remplacer' : 'Téléverser une image'}
               </Button>
               {uploadName && (
                 <button
                   onClick={removeUpload}
                   className="h-8 w-8 rounded-lg hover:bg-red-50 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"
-                  title="Remove image"
+                  title="Retirer l'image"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -457,32 +457,32 @@ function ProductFormModal({
         </div>
         {coverUrl && (
           <div className="relative aspect-[4/3] max-h-40 rounded-xl overflow-hidden bg-slate-100">
-            <img src={coverUrl} alt="Preview" className="h-full w-full object-cover" />
+            <img src={coverUrl} alt="Aperçu" className="h-full w-full object-cover" />
             <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-ink/70 backdrop-blur text-[10px] font-medium text-white">
-              {uploadName ? 'Uploaded' : 'Remote URL'}
+              {uploadName ? 'Téléversée' : 'URL distante'}
             </span>
           </div>
         )}
         <div className="grid grid-cols-2 gap-4">
           <Select
-            label="Status"
+            label="Statut"
             value={status}
             onChange={(e) => setStatus(e.target.value as ProductStatus)}
             options={[
-              { value: 'draft', label: 'Draft' },
-              { value: 'published', label: 'Published' },
-              { value: 'archived', label: 'Archived' },
+              { value: 'draft', label: 'Brouillon' },
+              { value: 'published', label: 'Publié' },
+              { value: 'archived', label: 'Archivé' },
             ]}
           />
           <div>
-            <label className="label">Featured</label>
+            <label className="label">Mis en avant</label>
             <button
               onClick={() => setFeatured(!featured)}
               className={`w-full rounded-xl border px-4 py-3 text-sm font-medium transition-colors ${
                 featured ? 'bg-orange-50 border-orange-200 text-orange-600' : 'border-slate-200 text-slate-500'
               }`}
             >
-              {featured ? 'Featured on storefront' : 'Not featured'}
+              {featured ? 'Mis en avant sur la vitrine' : 'Non mis en avant'}
             </button>
           </div>
         </div>

@@ -40,7 +40,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
       <div className="absolute inset-0 bg-ink/30 backdrop-blur-sm animate-fade-in" onClick={onClose} />
       <div
         className={classNames(
-          'relative w-full bg-white rounded-3xl shadow-lift animate-scale-in max-h-[90vh] flex flex-col',
+          'relative w-full bg-white rounded-3xl shadow-float animate-scale-in max-h-[90vh] flex flex-col',
           sizeClass
         )}
       >

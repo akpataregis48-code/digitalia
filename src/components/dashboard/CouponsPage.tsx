@@ -27,7 +27,7 @@ export function CouponsPage() {
       const data = await listCoupons(store.id);
       setCoupons(data);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load coupons');
+      setError(e instanceof Error ? e.message : 'Échec du chargement des coupons');
     }
     setLoading(false);
   };
@@ -42,16 +42,16 @@ export function CouponsPage() {
       if (id) {
         const updated = await updateCoupon(id, data);
         setCoupons((prev) => prev.map((c) => (c.id === id ? updated : c)));
-        toast('Coupon updated');
+        toast('Coupon mis à jour');
       } else {
         const created = await createCoupon(store.id, data);
         setCoupons((prev) => [created, ...prev]);
-        toast('Coupon created');
+        toast('Coupon créé');
       }
       setShowForm(false);
       setEditTarget(null);
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to save', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de l’enregistrement', 'error');
     }
   };
 
@@ -59,28 +59,28 @@ export function CouponsPage() {
     try {
       await deleteCoupon(coupon.id);
       setCoupons((prev) => prev.filter((c) => c.id !== coupon.id));
-      toast('Coupon deleted');
+      toast('Coupon supprimé');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to delete', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de la suppression', 'error');
     }
   };
 
   const copyCode = (code: string) => {
     navigator.clipboard.writeText(code);
-    toast('Code copied');
+    toast('Code copié');
   };
 
-  if (loading) return <LoadingPage label="Loading coupons..." />;
+  if (loading) return <LoadingPage label="Chargement des coupons..." />;
   if (error) return <ErrorState message={error} onRetry={load} />;
 
   return (
     <div>
       <DashboardPageHeader
         title="Coupons"
-        description={`${coupons.length} discount codes`}
+        description={`${coupons.length} code(s) de réduction`}
         action={
           <Button onClick={() => { setEditTarget(null); setShowForm(true); }} icon={<Plus className="h-4 w-4" />}>
-            New coupon
+            Nouveau coupon
           </Button>
         }
       />
@@ -89,9 +89,9 @@ export function CouponsPage() {
         <Card className="p-0">
           <EmptyState
             icon={<Tag className="h-7 w-7" />}
-            title="No coupons yet"
-            description="Create discount codes to boost sales and reward customers."
-            action={<Button onClick={() => setShowForm(true)} icon={<Plus className="h-4 w-4" />}>New coupon</Button>}
+            title="Aucun coupon pour le moment"
+            description="Créez des codes de réduction pour booster vos ventes et récompenser vos clients."
+            action={<Button onClick={() => setShowForm(true)} icon={<Plus className="h-4 w-4" />}>Nouveau coupon</Button>}
           />
         </Card>
       ) : (
@@ -111,12 +111,12 @@ export function CouponsPage() {
                   </div>
                   <p className="text-sm text-slate-400">
                     {coupon.discount_type === 'percent'
-                      ? `${coupon.discount_value}% off`
-                      : `${(coupon.discount_value / 100).toFixed(2)} off`}
+                      ? `${coupon.discount_value} % de remise`
+                      : `${(coupon.discount_value / 100).toFixed(2)} $ de remise`}
                   </p>
                 </div>
                 <Badge variant={coupon.active ? 'success' : 'slate'}>
-                  {coupon.active ? 'Active' : 'Inactive'}
+                  {coupon.active ? 'Actif' : 'Inactif'}
                 </Badge>
               </div>
 
@@ -124,19 +124,19 @@ export function CouponsPage() {
 
               <dl className="space-y-1.5 text-xs">
                 <div className="flex justify-between">
-                  <dt className="text-slate-400">Used</dt>
+                  <dt className="text-slate-400">Utilisations</dt>
                   <dd className="font-medium">
                     {coupon.used_count}{coupon.max_uses ? ` / ${coupon.max_uses}` : ''}
                   </dd>
                 </div>
                 {coupon.expires_at && (
                   <div className="flex justify-between">
-                    <dt className="text-slate-400">Expires</dt>
+                    <dt className="text-slate-400">Expire le</dt>
                     <dd className="font-medium">{formatDate(coupon.expires_at)}</dd>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <dt className="text-slate-400">Created</dt>
+                  <dt className="text-slate-400">Créé le</dt>
                   <dd className="font-medium">{formatDate(coupon.created_at)}</dd>
                 </div>
               </dl>
@@ -148,7 +148,7 @@ export function CouponsPage() {
                   onClick={() => { setEditTarget(coupon); setShowForm(true); }}
                   icon={<Edit2 className="h-3.5 w-3.5" />}
                 >
-                  Edit
+                  Modifier
                 </Button>
                 <Button
                   size="sm"
@@ -157,7 +157,7 @@ export function CouponsPage() {
                   className="text-slate-400 hover:text-red-500"
                   icon={<Trash2 className="h-3.5 w-3.5" />}
                 >
-                  Delete
+                  Supprimer
                 </Button>
                 <div className="flex-1" />
                 <button
@@ -166,7 +166,7 @@ export function CouponsPage() {
                     coupon.active ? 'text-slate-400 hover:bg-slate-100' : 'text-turquoise-600 hover:bg-turquoise-50'
                   }`}
                 >
-                  {coupon.active ? 'Deactivate' : 'Activate'}
+                  {coupon.active ? 'Désactiver' : 'Activer'}
                 </button>
               </div>
             </Card>
@@ -186,9 +186,9 @@ export function CouponsPage() {
         open={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
         onConfirm={() => deleteTarget && handleDelete(deleteTarget)}
-        title="Delete coupon?"
-        message={`Coupon "${deleteTarget?.code}" will be permanently deleted.`}
-        confirmLabel="Delete"
+        title="Supprimer le coupon ?"
+        message={`Le coupon « ${deleteTarget?.code} » sera définitivement supprimé.`}
+        confirmLabel="Supprimer"
         danger
       />
     </div>
@@ -216,12 +216,12 @@ function CouponFormModal({
   const handleSave = () => {
     setError(null);
     if (!code.trim()) {
-      setError('Code is required');
+      setError('Le code est requis');
       return;
     }
     const value = parseInt(discountValue || '0', 10);
     if (discountType === 'percent' && (value < 1 || value > 100)) {
-      setError('Percentage must be between 1 and 100');
+      setError('Le pourcentage doit être compris entre 1 et 100');
       return;
     }
     onSave({
@@ -239,41 +239,41 @@ function CouponFormModal({
     <Modal
       open
       onClose={onClose}
-      title={coupon ? 'Edit coupon' : 'New coupon'}
+      title={coupon ? 'Modifier le coupon' : 'Nouveau coupon'}
       size="md"
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSave}>{coupon ? 'Save changes' : 'Create coupon'}</Button>
+          <Button variant="ghost" onClick={onClose}>Annuler</Button>
+          <Button onClick={handleSave}>{coupon ? 'Enregistrer les modifications' : 'Créer le coupon'}</Button>
         </>
       }
     >
       <div className="space-y-4">
         <Input
-          label="Coupon code"
+          label="Code du coupon"
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase())}
           placeholder="SUMMER20"
-          hint="Customers enter this at checkout"
+          hint="Les clients le saisissent au moment du paiement"
         />
         <Textarea
-          label="Description (optional)"
+          label="Description (facultatif)"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Summer sale - 20% off"
+          placeholder="Soldes d'été - 20 % de remise"
         />
         <div className="grid grid-cols-2 gap-4">
           <Select
-            label="Discount type"
+            label="Type de remise"
             value={discountType}
             onChange={(e) => setDiscountType(e.target.value as 'percent' | 'fixed')}
             options={[
-              { value: 'percent', label: 'Percentage (%)' },
-              { value: 'fixed', label: 'Fixed amount (cents)' },
+              { value: 'percent', label: 'Pourcentage (%)' },
+              { value: 'fixed', label: 'Montant fixe (centimes)' },
             ]}
           />
           <Input
-            label={discountType === 'percent' ? 'Percentage value' : 'Amount in cents'}
+            label={discountType === 'percent' ? 'Valeur en pourcentage' : 'Montant en centimes'}
             type="number"
             value={discountValue}
             onChange={(e) => setDiscountValue(e.target.value)}
@@ -282,28 +282,28 @@ function CouponFormModal({
         </div>
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Max uses (optional)"
+            label="Utilisations max (facultatif)"
             type="number"
             value={maxUses}
             onChange={(e) => setMaxUses(e.target.value)}
-            placeholder="Unlimited"
+            placeholder="Illimité"
           />
           <Input
-            label="Expiry date (optional)"
+            label="Date d'expiration (facultatif)"
             type="date"
             value={expiresAt}
             onChange={(e) => setExpiresAt(e.target.value)}
           />
         </div>
         <div>
-          <label className="label">Status</label>
+          <label className="label">Statut</label>
           <button
             onClick={() => setActive(!active)}
             className={`w-full rounded-xl border px-4 py-3 text-sm font-medium transition-colors ${
               active ? 'bg-turquoise-50 border-turquoise-200 text-turquoise-600' : 'border-slate-200 text-slate-500'
             }`}
           >
-            {active ? 'Active' : 'Inactive'}
+            {active ? 'Actif' : 'Inactif'}
           </button>
         </div>
         {error && (

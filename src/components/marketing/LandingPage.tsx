@@ -22,26 +22,26 @@ export function LandingPage() {
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-turquoise-50 border border-turquoise-100 px-4 py-1.5 mb-6 animate-slide-up">
               <Sparkles className="h-3.5 w-3.5 text-turquoise-500" />
-              <span className="text-xs font-semibold text-turquoise-700">Sell digital products, beautifully</span>
+              <span className="text-xs font-semibold text-turquoise-700">Vendez vos produits numériques, en toute beauté</span>
             </div>
             <h1 className="text-h1 lg:text-display text-balance animate-slide-up" style={{ animationDelay: '50ms' }}>
-              The modern way to sell
-              <span className="block text-turquoise-500">digital products</span>
+              La façon moderne de vendre des{' '}
+              <span className="block text-turquoise-500">produits numériques</span>
             </h1>
             <p className="mt-6 text-lg text-slate-500 max-w-xl mx-auto text-balance animate-slide-up" style={{ animationDelay: '100ms' }}>
-              Launch your store in minutes. Drag-and-drop builder, secure checkout with card, mobile money, and PayPal, real-time analytics, and an AI mock studio — all in one place.
+              Lancez votre boutique en quelques minutes. Éditeur glisser-déposer, paiement sécurisé par carte, mobile money et PayPal, statistiques en temps réel et studio IA — le tout au même endroit.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 animate-slide-up" style={{ animationDelay: '150ms' }}>
               <button onClick={() => navigate('/signup')} className="btn-primary btn-lg w-full sm:w-auto">
-                Start selling free
+                Commencer à vendre gratuitement
                 <ArrowRight className="h-4 w-4" />
               </button>
               <button onClick={() => navigate('/stores')} className="btn-outline btn-lg w-full sm:w-auto">
-                Browse stores
+                Découvrir les boutiques
               </button>
             </div>
             <p className="mt-4 text-xs text-slate-400 animate-slide-up" style={{ animationDelay: '200ms' }}>
-              No credit card required. Free forever plan.
+              Sans carte bancaire. Offre gratuite pour toujours.
             </p>
           </div>
 
@@ -49,7 +49,7 @@ export function LandingPage() {
           <div className="mt-16 max-w-4xl mx-auto animate-slide-up" style={{ animationDelay: '250ms' }}>
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-br from-turquoise-100 via-sky-100 to-orange-100 rounded-[2rem] blur-2xl opacity-50" />
-              <div className="relative bg-white rounded-3xl shadow-lift border border-slate-100 overflow-hidden">
+              <div className="relative bg-white rounded-3xl shadow-float border border-slate-100 overflow-hidden">
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-slate-100 bg-slate-50">
                   <div className="flex gap-1.5">
                     <div className="h-3 w-3 rounded-full bg-red-300" />
@@ -63,9 +63,9 @@ export function LandingPage() {
                 <div className="p-6 lg:p-8">
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     {[
-                      { label: 'Revenue', value: '$12,480', color: 'text-turquoise-600' },
-                      { label: 'Orders', value: '342', color: 'text-sky-600' },
-                      { label: 'Customers', value: '1,205', color: 'text-orange-600' },
+                      { label: 'Revenus', value: '$12,480', color: 'text-turquoise-600' },
+                      { label: 'Commandes', value: '342', color: 'text-sky-600' },
+                      { label: 'Clients', value: '1,205', color: 'text-orange-600' },
                       { label: 'Conversion', value: '4.2%', color: 'text-turquoise-600' },
                     ].map((stat) => (
                       <div key={stat.label} className="bg-slate-50 rounded-xl p-3">
@@ -94,7 +94,7 @@ export function LandingPage() {
       <section className="border-y border-slate-100 bg-cream py-8">
         <div className="max-w-container mx-auto px-5 lg:px-8">
           <p className="text-center text-xs font-semibold text-slate-400 uppercase tracking-wider mb-5">
-            Trusted by 4,000+ digital creators worldwide
+            Plus de 4 000 créateurs de produits numériques nous font confiance
           </p>
           <div className="flex items-center justify-center flex-wrap gap-x-10 gap-y-4 opacity-60">
             {['Notionly', 'PixelForge', 'SoundLab', 'EbookHub', 'DesignKit', 'CoursePro'].map((name) => (
@@ -108,26 +108,26 @@ export function LandingPage() {
       <section id="features" className="py-24">
         <div className="max-w-container mx-auto px-5 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <p className="text-sm font-semibold text-turquoise-600 mb-2">Everything you need</p>
-            <h2 className="text-h2 mb-4 text-balance">One platform, every tool to sell digital goods</h2>
+            <p className="text-sm font-semibold text-turquoise-600 mb-2">Tout ce qu'il vous faut</p>
+            <h2 className="text-h2 mb-4 text-balance">Une plateforme, tous les outils pour vendre vos produits numériques</h2>
             <p className="text-slate-500 text-balance">
-              From your first product to your ten-thousandth order, Digitalia handles the hard parts so you can focus on creating.
+              De votre premier produit à votre dix-millième commande, Digitalia s'occupe des aspects compliqués pour que vous puissiez vous concentrer sur la création.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { icon: Palette, title: 'Visual store builder', text: 'Drag and drop blocks onto a live canvas. Undo, redo, save drafts, and publish when ready.', accent: 'turquoise' },
-              { icon: CreditCard, title: 'Multi-method checkout', text: 'Accept cards, mobile money, and PayPal. Local mock processor with full status tracking.', accent: 'orange' },
-              { icon: BarChart3, title: 'Real-time analytics', text: 'Revenue, orders, conversion, and visitor charts. Know what sells and what does not.', accent: 'sky' },
-              { icon: Download, title: 'Digital file delivery', text: 'Upload files per product. Customers get secure download links after purchase.', accent: 'turquoise' },
-              { icon: Tag, title: 'Coupons & discounts', text: 'Percentage or fixed-amount coupons with usage limits and expiry dates.', accent: 'orange' },
-              { icon: Users, title: 'Customer management', text: 'Every buyer is tracked automatically. See lifetime value, order history, and location.', accent: 'sky' },
-              { icon: Wand2, title: 'AI mock studio', text: 'Generate product mockups from text prompts. Pick a style, generate, and use it instantly.', accent: 'turquoise' },
-              { icon: Zap, title: 'Marketing campaigns', text: 'Email your customers with targeted campaigns. Track opens and clicks.', accent: 'orange' },
-              { icon: Shield, title: 'Secure by default', text: 'Row-level security on every table. Your data is isolated and protected.', accent: 'sky' },
+              { icon: Palette, title: 'Éditeur de boutique visuel', text: 'Glissez-déposez des blocs sur un canevas en direct. Annulez, répétez, enregistrez des brouillons et publiez quand vous êtes prêt.', accent: 'turquoise' },
+              { icon: CreditCard, title: 'Paiement multi-méthodes', text: 'Acceptez cartes, mobile money et PayPal. Processeur de paiement local avec suivi complet des statuts.', accent: 'orange' },
+              { icon: BarChart3, title: 'Statistiques en temps réel', text: 'Revenus, commandes, conversion et graphiques de visiteurs. Sachez ce qui se vend et ce qui ne se vend pas.', accent: 'sky' },
+              { icon: Download, title: 'Livraison de fichiers numériques', text: 'Joignez des fichiers à chaque produit. Vos clients reçoivent des liens de téléchargement sécurisés après l\u2019achat.', accent: 'turquoise' },
+              { icon: Tag, title: 'Coupons et remises', text: 'Coupons en pourcentage ou à montant fixe, avec limites d\u2019utilisation et dates d’expiration.', accent: 'orange' },
+              { icon: Users, title: 'Gestion des clients', text: 'Chaque acheteur est suivi automatiquement. Valeur à vie, historique des commandes et localisation.', accent: 'sky' },
+              { icon: Wand2, title: 'AI Mock Studio', text: 'Générez des maquettes de produits à partir de descriptions. Choisissez un style, générez, et utilisez-les immédiatement.', accent: 'turquoise' },
+              { icon: Zap, title: 'Campagnes marketing', text: 'Envoyez des campagnes ciblées à vos clients par e-mail. Suivez les ouvertures et les clics.', accent: 'orange' },
+              { icon: Shield, title: 'Sécurisé par défaut', text: 'Sécurité au niveau des lignes sur chaque table. Vos données sont isolées et protégées.', accent: 'sky' },
             ].map((f) => (
-              <div key={f.title} className="card p-6 hover:shadow-card transition-shadow duration-200 group">
+              <div key={f.title} className="card card-hover p-6">
                 <div className={`h-11 w-11 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform ${
                   f.accent === 'turquoise' ? 'bg-turquoise-50 text-turquoise-500' :
                   f.accent === 'sky' ? 'bg-sky-50 text-sky-500' : 'bg-orange-50 text-orange-500'
@@ -147,17 +147,17 @@ export function LandingPage() {
         <div className="max-w-container mx-auto px-5 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
-              <p className="text-sm font-semibold text-orange-600 mb-2">Store Builder</p>
-              <h2 className="text-h2 mb-4 text-balance">Design your storefront on a real canvas</h2>
+              <p className="text-sm font-semibold text-orange-600 mb-2">Éditeur de boutique</p>
+              <h2 className="text-h2 mb-4 text-balance">Concevez votre vitrine sur un vrai canevas</h2>
               <p className="text-slate-500 mb-6 text-balance">
-                Drag blocks, edit in a live inspector, preview exactly what your customers will see. Undo and redo freely. Save drafts, then publish with one click.
+                Glissez des blocs, modifiez-les dans un inspecteur en direct, prévisualisez exactement ce que verront vos clients. Annulez et répétez librement. Enregistrez des brouillons, puis publiez en un clic.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
-                  'Drag-and-drop hero, products, features, text, image, and banner blocks',
-                  'Live inspector with theme colors, fonts, and layout controls',
-                  'Undo and redo with full history',
-                  'Save drafts and publish when ready',
+                  'Blocs glisser-déposer : héros, produits, fonctionnalités, texte, image et bannière',
+                  'Inspecteur en direct : couleurs du thème, polices et réglages de mise en page',
+                  'Annuler et répéter avec historique complet',
+                  'Enregistrer des brouillons et publier quand vous êtes prêt',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <div className="h-5 w-5 rounded-full bg-turquoise-100 flex items-center justify-center mt-0.5 shrink-0">
@@ -168,13 +168,13 @@ export function LandingPage() {
                 ))}
               </ul>
               <button onClick={() => navigate('/signup')} className="btn-primary">
-                Try the builder
+                Essayer l'éditeur
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
             <div className="relative">
               <div className="absolute -inset-3 bg-gradient-to-br from-turquoise-100 to-sky-100 rounded-3xl blur-2xl opacity-50" />
-              <div className="relative bg-white rounded-2xl shadow-lift border border-slate-100 overflow-hidden">
+              <div className="relative bg-white rounded-2xl shadow-float border border-slate-100 overflow-hidden">
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100 bg-slate-50">
                   <div className="flex gap-1.5">
                     <div className="h-2.5 w-2.5 rounded-full bg-red-300" />
@@ -185,12 +185,12 @@ export function LandingPage() {
                     <button className="text-slate-400 hover:text-ink p-1 rounded"><span className="text-xs">↶</span></button>
                     <button className="text-slate-400 hover:text-ink p-1 rounded"><span className="text-xs">↷</span></button>
                     <div className="w-px h-4 bg-slate-200 mx-1" />
-                    <span className="text-xs font-medium text-turquoise-600 px-2 py-0.5 rounded bg-turquoise-50">Draft</span>
+                    <span className="text-xs font-medium text-turquoise-600 px-2 py-0.5 rounded bg-turquoise-50">Brouillon</span>
                   </div>
                 </div>
                 <div className="flex">
                   <div className="w-36 border-r border-slate-100 p-3 space-y-2 bg-slate-50/50">
-                    {['Hero', 'Products', 'Features', 'Text', 'Image', 'Banner'].map((b, i) => (
+                    {['Héros', 'Produits', 'Fonctionnalités', 'Texte', 'Image', 'Bannière'].map((b, i) => (
                       <div key={b} className={`flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-medium ${i === 0 ? 'bg-white shadow-soft text-ink' : 'text-slate-400'}`}>
                         <div className="h-3.5 w-3.5 rounded bg-slate-200" />
                         {b}
@@ -240,16 +240,16 @@ export function LandingPage() {
             </div>
             <div className="order-1 lg:order-2">
               <p className="text-sm font-semibold text-turquoise-600 mb-2">AI Mock Studio</p>
-              <h2 className="text-h2 mb-4 text-balance">Generate product mockups with AI</h2>
+              <h2 className="text-h2 mb-4 text-balance">Générez des maquettes de produits avec l\u2019IA</h2>
               <p className="text-slate-500 mb-6 text-balance">
-                Describe what you want, pick a style, and generate mockups for your digital products. No design tools required.
+                Décrivez ce que vous voulez, choisissez un style et générez des maquettes pour vos produits numériques. Aucun outil de design requis.
               </p>
               <ul className="space-y-3 mb-8">
                 {[
-                  'Text-to-mockup generation in seconds',
-                  'Multiple visual styles to choose from',
-                  'Use generated images as product covers instantly',
-                  'All your mockups saved in one library',
+                  'Génération de maquettes à partir d\u2019un texte en quelques secondes',
+                  'Plusieurs styles visuels au choix',
+                  'Utilisez les images générées comme couvertures de produits immédiatement',
+                  'Toutes vos maquettes conservées dans une bibliothèque',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <div className="h-5 w-5 rounded-full bg-orange-100 flex items-center justify-center mt-0.5 shrink-0">
@@ -260,7 +260,7 @@ export function LandingPage() {
                 ))}
               </ul>
               <button onClick={() => navigate('/signup')} className="btn-primary">
-                Try the studio
+                Essayer le studio
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -272,35 +272,35 @@ export function LandingPage() {
       <section id="pricing" className="py-24 bg-cream border-y border-slate-100">
         <div className="max-w-container mx-auto px-5 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <p className="text-sm font-semibold text-orange-600 mb-2">Pricing</p>
-            <h2 className="text-h2 mb-4 text-balance">Simple pricing that grows with you</h2>
-            <p className="text-slate-500 text-balance">Start free. Upgrade when you are ready. No hidden fees.</p>
+            <p className="text-sm font-semibold text-orange-600 mb-2">Tarifs</p>
+            <h2 className="text-h2 mb-4 text-balance">Des tarifs simples qui évoluent avec vous</h2>
+            <p className="text-slate-500 text-balance">Commencez gratuitement. Passez au niveau supérieur quand vous êtes prêt. Sans frais cachés.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-5 max-w-4xl mx-auto">
             {[
               {
-                name: 'Starter',
+                name: 'Démarrage',
                 price: '$0',
-                period: 'forever',
-                features: ['1 store', 'Up to 10 products', 'Store builder', 'Mock checkout', 'Basic analytics'],
-                cta: 'Start free',
+                period: 'pour toujours',
+                features: ['1 boutique', 'Jusqu’à 10 produits', 'Éditeur de boutique', 'Paiement de démonstration', 'Statistiques de base'],
+                cta: 'Commencer gratuitement',
                 highlight: false,
               },
               {
-                name: 'Creator',
+                name: 'Créateur',
                 price: '$19',
-                period: 'per month',
-                features: ['1 store', 'Unlimited products', 'Store builder', 'Coupons & marketing', 'Full analytics', 'AI mock studio'],
-                cta: 'Start 14-day trial',
+                period: 'par mois',
+                features: ['1 boutique', 'Produits illimités', 'Éditeur de boutique', 'Coupons et marketing', 'Statistiques complètes', 'AI Mock Studio'],
+                cta: 'Essai gratuit 14 jours',
                 highlight: true,
               },
               {
                 name: 'Business',
                 price: '$49',
-                period: 'per month',
-                features: ['3 stores', 'Unlimited products', 'Everything in Creator', 'Priority support', 'Custom domains', 'Team seats'],
-                cta: 'Start 14-day trial',
+                period: 'par mois',
+                features: ['3 boutiques', 'Produits illimités', 'Tout ce qui est inclus dans Créateur', 'Support prioritaire', 'Domaines personnalisés', 'Sièges d\u2019équipe'],
+                cta: 'Essai gratuit 14 jours',
                 highlight: false,
               },
             ].map((plan) => (
@@ -314,7 +314,7 @@ export function LandingPage() {
               >
                 {plan.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="badge bg-turquoise-400 text-white px-3 py-1">Most popular</span>
+                    <span className="badge bg-turquoise-400 text-white px-3 py-1">Le plus populaire</span>
                   </div>
                 )}
                 <h3 className="text-lg font-bold mb-1">{plan.name}</h3>
@@ -347,15 +347,15 @@ export function LandingPage() {
         <div className="max-w-3xl mx-auto px-5 lg:px-8">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-sky-600 mb-2">FAQ</p>
-            <h2 className="text-h2 mb-4">Questions, answered</h2>
+            <h2 className="text-h2 mb-4">Questions fréquentes</h2>
           </div>
           <div className="space-y-4">
             {[
-              { q: 'What kinds of digital products can I sell?', a: 'Ebooks, courses, templates, presets, music, software, design assets, and any other downloadable file. If it is digital, you can sell it on Digitalia.' },
-              { q: 'How does checkout work?', a: 'Digitalia uses a local mock payment processor that simulates Card, Mobile Money, and PayPal. Every payment status (success, failed, declined, pending, timeout, cancelled, refunded, insufficient funds) is fully supported and tracked.' },
-              { q: 'Do I need to know how to code?', a: 'No. The Store Builder is fully visual — drag blocks, edit them in the inspector, preview live, and publish with one click.' },
-              { q: 'Can I customize my storefront?', a: 'Yes. You control the theme colors, fonts, layout, and the exact blocks that appear. The canvas shows exactly what customers will see.' },
-              { q: 'Is there a free plan?', a: 'Yes, the Starter plan is free forever and includes up to 10 products, the store builder, and mock checkout.' },
+              { q: 'Quels types de produits numériques puis-je vendre ?', a: 'E-books, cours, modèles, préréglages, musique, logiciels, ressources de design et tout autre fichier téléchargeable. Si c’est numérique, vous pouvez le vendre sur Digitalia.' },
+              { q: 'Comment fonctionne le paiement ?', a: 'Digitalia utilise un processeur de paiement local de démonstration qui simule la carte, le mobile money et PayPal. Chaque statut de paiement (succès, échec, refusé, en attente, délai dépassé, annulé, remboursé, fonds insuffisants) est entièrement pris en charge et suivi.' },
+              { q: 'Dois-je savoir coder ?', a: 'Non. L\u2019éditeur de boutique est entièrement visuel — glissez des blocs, modifiez-les dans l\u2019inspecteur, prévisualisez en direct et publiez en un clic.' },
+              { q: 'Puis-je personnaliser ma vitrine ?', a: 'Oui. Vous contrôlez les couleurs du thème, les polices, la mise en page et les blocs exacts qui apparaissent. Le canevas montre exactement ce que verront vos clients.' },
+              { q: 'Existe-t-il un plan gratuit ?', a: 'Oui, le plan Démarrage est gratuit pour toujours et inclut jusqu\u2019à 10 produits, l\u2019éditeur de boutique et le paiement de démonstration.' },
             ].map((item) => (
               <div key={item.q} className="card p-5">
                 <h3 className="text-base font-semibold mb-2">{item.q}</h3>
@@ -369,12 +369,12 @@ export function LandingPage() {
       {/* CTA */}
       <section className="py-20 bg-gradient-to-br from-turquoise-50 via-white to-sky-50 border-t border-slate-100">
         <div className="max-w-container mx-auto px-5 lg:px-8 text-center">
-          <h2 className="text-h2 mb-4 text-balance">Ready to start selling?</h2>
+          <h2 className="text-h2 mb-4 text-balance">Prêt à commencer à vendre ?</h2>
           <p className="text-slate-500 mb-7 max-w-lg mx-auto text-balance">
-            Join thousands of creators selling digital products with Digitalia. Set up your store in minutes.
+            Rejoignez des milliers de créateurs qui vendent des produits numériques avec Digitalia. Créez votre boutique en quelques minutes.
           </p>
           <button onClick={() => navigate('/signup')} className="btn-primary btn-lg">
-            Create your store
+            Créer votre boutique
             <ArrowRight className="h-5 w-5" />
           </button>
         </div>

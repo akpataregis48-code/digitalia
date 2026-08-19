@@ -33,7 +33,7 @@ export function StoreHomePage({ slug }: { slug: string }) {
       try {
         const s = await getStoreBySlug(slug);
         if (!s) {
-          setError('Store not found');
+          setError('Boutique introuvable');
           setLoading(false);
           return;
         }
@@ -43,15 +43,15 @@ export function StoreHomePage({ slug }: { slug: string }) {
         setProducts(ps);
         trackEvent(s.id, 'store_view', { slug });
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Failed to load store');
+        setError(e instanceof Error ? e.message : 'Échec du chargement de la boutique');
       }
       setLoading(false);
     })();
   }, [slug]);
 
-  if (loading) return <LoadingPage label="Loading store..." />;
+  if (loading) return <LoadingPage label="Chargement de la boutique..." />;
   if (error) return <ErrorState message={error} />;
-  if (!store) return <ErrorState message="Store not found" />;
+  if (!store) return <ErrorState message="Boutique introuvable" />;
 
   const theme: StorefrontTheme = storefront?.published_theme || storefront?.theme || {
     primary: '#45C7B2', accent: '#FF8A3D', headingFont: 'Manrope', radius: 16, layout: 'centered',
@@ -72,8 +72,8 @@ export function StoreHomePage({ slug }: { slug: string }) {
         <div className="py-20">
           <EmptyState
             icon={<ShoppingBag className="h-7 w-7" />}
-            title="Store coming soon"
-            description="This store has not been set up yet."
+            title="Boutique à venir"
+            description="Cette boutique n'a pas encore été configurée."
           />
         </div>
       )}
@@ -98,21 +98,21 @@ export function StoreProductPage({ slug, productSlug }: { slug: string; productS
       try {
         const s = await getStoreBySlug(slug);
         if (!s) {
-          setError('Store not found');
+          setError('Boutique introuvable');
           setLoading(false);
           return;
         }
         setStore(s);
         const p = await getProductBySlug(s.id, productSlug);
         if (!p) {
-          setError('Product not found');
+          setError('Produit introuvable');
           setLoading(false);
           return;
         }
         setProduct(p);
         trackEvent(s.id, 'product_view', { product_id: p.id, slug: productSlug });
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Failed to load product');
+        setError(e instanceof Error ? e.message : 'Échec du chargement du produit');
       }
       setLoading(false);
     })();
@@ -122,29 +122,29 @@ export function StoreProductPage({ slug, productSlug }: { slug: string; productS
     if (!product || !store) return;
     // If cart has items from a different store, confirm replacing
     if (storeId && storeId !== store.id && items.length > 0) {
-      if (!confirm('Your cart has items from another store. Replace with this item?')) return;
+      if (!confirm('Votre panier contient des articles d’une autre boutique. Remplacer par cet article ?')) return;
     }
     add(product, store.id);
     setAdded(true);
-    toast('Added to cart');
+    toast('Ajouté au panier');
     setTimeout(() => setAdded(false), 2000);
   };
 
   const handleBuyNow = () => {
     if (!product || !store) return;
     if (storeId && storeId !== store.id && items.length > 0) {
-      if (!confirm('Your cart has items from another store. Replace with this item?')) return;
+      if (!confirm('Votre panier contient des articles d’une autre boutique. Remplacer par cet article ?')) return;
     }
     add(product, store.id);
     navigate(`/store/${slug}/checkout`);
   };
 
-  if (loading) return <LoadingPage label="Loading product..." />;
+  if (loading) return <LoadingPage label="Chargement du produit..." />;
   if (error || !store || !product) {
     return (
       <div className="min-h-screen bg-white">
-        <StorefrontHeader store={store || { id: '', name: 'Store', slug, tagline: null, logo_url: null, cover_url: null, contact_email: null, description: null, currency: 'USD', published: true, social_links: {}, user_id: '', created_at: '', updated_at: '' }} />
-        <ErrorState message={error || 'Product not found'} />
+        <StorefrontHeader store={store || { id: '', name: 'Boutique', slug, tagline: null, logo_url: null, cover_url: null, contact_email: null, description: null, currency: 'USD', published: true, social_links: {}, user_id: '', created_at: '', updated_at: '' }} />
+        <ErrorState message={error || 'Produit introuvable'} />
       </div>
     );
   }
@@ -158,7 +158,7 @@ export function StoreProductPage({ slug, productSlug }: { slug: string; productS
           className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-ink transition-colors mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to store
+          Retour à la boutique
         </button>
 
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
@@ -187,7 +187,7 @@ export function StoreProductPage({ slug, productSlug }: { slug: string; productS
             </div>
 
             <p className="text-slate-600 leading-relaxed whitespace-pre-wrap mb-6">
-              {product.description || 'No description provided.'}
+              {product.description || 'Aucune description fournie.'}
             </p>
 
             {product.tags.length > 0 && (
@@ -200,22 +200,22 @@ export function StoreProductPage({ slug, productSlug }: { slug: string; productS
 
             <div className="flex flex-col sm:flex-row gap-3 mb-6">
               <Button onClick={handleAddToCart} variant="outline" className="flex-1" icon={added ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}>
-                {added ? 'Added!' : 'Add to cart'}
+                {added ? 'Ajouté !' : 'Ajouter au panier'}
               </Button>
               <Button onClick={handleBuyNow} className="flex-1" icon={<ArrowRight className="h-4 w-4" />}>
-                Buy now
+                Acheter maintenant
               </Button>
             </div>
 
             <div className="space-y-2.5 pt-5 border-t border-slate-100">
               <div className="flex items-center gap-3 text-sm text-slate-500">
-                <Download className="h-4 w-4 text-turquoise-500" /> Instant download after purchase
+                <Download className="h-4 w-4 text-turquoise-500" /> Téléchargement immédiat après l'achat
               </div>
               <div className="flex items-center gap-3 text-sm text-slate-500">
-                <ShieldCheck className="h-4 w-4 text-sky-500" /> Secure checkout
+                <ShieldCheck className="h-4 w-4 text-sky-500" /> Paiement sécurisé
               </div>
               <div className="flex items-center gap-3 text-sm text-slate-500">
-                <Check className="h-4 w-4 text-orange-500" /> Lifetime access
+                <Check className="h-4 w-4 text-orange-500" /> Accès à vie
               </div>
             </div>
           </div>
@@ -243,9 +243,9 @@ export function CartPage({ slug }: { slug: string }) {
         <div className="max-w-2xl mx-auto px-5 py-16">
           <EmptyState
             icon={<ShoppingBag className="h-7 w-7" />}
-            title="Your cart is empty"
-            description="Browse products and add them to your cart."
-            action={<Button onClick={() => navigate(`/store/${slug}`)}>Browse products</Button>}
+            title="Votre panier est vide"
+            description="Parcourez les produits et ajoutez-les à votre panier."
+            action={<Button onClick={() => navigate(`/store/${slug}`)}>Parcourir les produits</Button>}
           />
         </div>
         {store && <StorefrontFooter store={store} />}
@@ -258,15 +258,15 @@ export function CartPage({ slug }: { slug: string }) {
       {store && <StorefrontHeader store={store} />}
       <div className="max-w-3xl mx-auto px-5 py-8">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Cart ({count})</h1>
+          <h1 className="text-2xl font-bold">Panier ({count})</h1>
           <button onClick={clear} className="text-sm text-slate-400 hover:text-red-500 transition-colors">
-            Clear cart
+            Vider le panier
           </button>
         </div>
 
         <div className="space-y-3 mb-6">
           {items.map((item) => (
-            <div key={item.product.id} className="flex items-center gap-4 rounded-2xl border border-slate-100 p-4">
+            <div key={item.product.id} className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white shadow-card p-4">
               <div className="h-16 w-16 rounded-xl bg-slate-100 overflow-hidden shrink-0">
                 {item.product.cover_url ? (
                   <img src={item.product.cover_url} alt="" className="h-full w-full object-cover" />
@@ -283,7 +283,7 @@ export function CartPage({ slug }: { slug: string }) {
                 >
                   {item.product.title}
                 </button>
-                <p className="text-sm text-slate-400">{formatCurrency(item.product.price_cents)} each</p>
+                <p className="text-sm text-slate-400">{formatCurrency(item.product.price_cents)} l'unité</p>
               </div>
               <div className="flex items-center gap-1.5">
                 <button
@@ -311,9 +311,9 @@ export function CartPage({ slug }: { slug: string }) {
           ))}
         </div>
 
-        <div className="rounded-2xl bg-slate-50 p-5 mb-6">
+        <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5 mb-6 shadow-soft">
           <div className="flex justify-between text-sm text-slate-500 mb-2">
-            <span>Subtotal</span>
+            <span>Sous-total</span>
             <span>{formatCurrency(subtotal)}</span>
           </div>
           <div className="flex justify-between text-lg font-bold">
@@ -323,7 +323,7 @@ export function CartPage({ slug }: { slug: string }) {
         </div>
 
         <Button onClick={() => navigate(`/store/${slug}/checkout`)} className="w-full" size="lg" icon={<ArrowRight className="h-5 w-5" />}>
-          Proceed to checkout
+          Passer au paiement
         </Button>
       </div>
       {store && <StorefrontFooter store={store} />}
@@ -373,14 +373,14 @@ export function CheckoutPage({ slug }: { slug: string }) {
         }
         setDiscount(disc);
         setAppliedCoupon(result.coupon.code);
-        toast('Coupon applied');
+        toast('Coupon appliqué');
       } else {
         toast(result.message, 'error');
         setDiscount(0);
         setAppliedCoupon(null);
       }
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to apply coupon', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de l’application du coupon', 'error');
     }
     setApplyingCoupon(false);
   };
@@ -389,7 +389,7 @@ export function CheckoutPage({ slug }: { slug: string }) {
 
   const handlePay = async () => {
     if (!email.trim()) {
-      toast('Enter your email', 'error');
+      toast('Saisissez votre e-mail', 'error');
       return;
     }
     if (!store) return;
@@ -425,7 +425,7 @@ export function CheckoutPage({ slug }: { slug: string }) {
         trackEvent(store.id, 'purchase', { total_cents: total, method });
       }
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Payment failed', 'error');
+      toast(e instanceof Error ? e.message : 'Échec du paiement', 'error');
       setPaymentResult({ status: 'failed', ref: 'ERROR' });
     }
     setProcessing(false);
@@ -467,36 +467,36 @@ export function CheckoutPage({ slug }: { slug: string }) {
           className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-ink transition-colors mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to cart
+          Retour au panier
         </button>
 
-        <h1 className="text-2xl font-bold mb-6">Checkout</h1>
+        <h1 className="text-2xl font-bold mb-6">Paiement</h1>
 
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Form */}
           <div className="lg:col-span-2 space-y-5">
             {/* Customer info */}
-            <div className="card p-5">
-              <h3 className="text-base font-semibold mb-4">Your details</h3>
+            <div className="card shadow-lift p-5">
+              <h3 className="text-base font-semibold mb-4">Vos informations</h3>
               <div className="space-y-3">
                 <div>
-                  <label className="label">Email</label>
+                  <label className="label">E-mail</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="input"
-                    placeholder="you@example.com"
+                    placeholder="vous@exemple.com"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="label">Name (optional)</label>
+                    <label className="label">Nom (facultatif)</label>
                     <input value={name} onChange={(e) => setName(e.target.value)} className="input" placeholder="Jane Doe" />
                   </div>
                   <div>
-                    <label className="label">Country (optional)</label>
-                    <input value={country} onChange={(e) => setCountry(e.target.value)} className="input" placeholder="United States" />
+                    <label className="label">Pays (facultatif)</label>
+                    <input value={country} onChange={(e) => setCountry(e.target.value)} className="input" placeholder="France" />
                   </div>
                 </div>
               </div>
@@ -504,10 +504,10 @@ export function CheckoutPage({ slug }: { slug: string }) {
 
             {/* Payment method */}
             <div className="card p-5">
-              <h3 className="text-base font-semibold mb-4">Payment method</h3>
+              <h3 className="text-base font-semibold mb-4">Moyen de paiement</h3>
               <div className="grid grid-cols-3 gap-3">
                 {([
-                  { id: 'card', label: 'Card', icon: CreditCard },
+                  { id: 'card', label: 'Carte', icon: CreditCard },
                   { id: 'mobile_money', label: 'Mobile Money', icon: Smartphone },
                   { id: 'paypal', label: 'PayPal', icon: Wallet },
                 ] as const).map((m) => (
@@ -529,23 +529,23 @@ export function CheckoutPage({ slug }: { slug: string }) {
 
               {method === 'card' && (
                 <div className="mt-4 space-y-3">
-                  <input className="input" placeholder="Card number" defaultValue="4242 4242 4242 4242" />
+                  <input className="input" placeholder="Numéro de carte" defaultValue="4242 4242 4242 4242" />
                   <div className="grid grid-cols-2 gap-3">
-                    <input className="input" placeholder="MM / YY" defaultValue="12 / 28" />
+                    <input className="input" placeholder="MM / AA" defaultValue="12 / 28" />
                     <input className="input" placeholder="CVC" defaultValue="123" />
                   </div>
-                  <p className="text-xs text-slate-400">This is a mock payment. No real charges are made.</p>
+                  <p className="text-xs text-slate-400">Paiement de démonstration. Aucun prélèvement réel n'est effectué.</p>
                 </div>
               )}
               {method === 'mobile_money' && (
                 <div className="mt-4 space-y-3">
-                  <input className="input" placeholder="Phone number" defaultValue="+256 700 000 000" />
-                  <p className="text-xs text-slate-400">Mock mobile money payment. No real charges.</p>
+                  <input className="input" placeholder="Numéro de téléphone" defaultValue="+256 700 000 000" />
+                  <p className="text-xs text-slate-400">Paiement mobile money de démonstration. Aucun prélèvement réel.</p>
                 </div>
               )}
               {method === 'paypal' && (
                 <div className="mt-4">
-                  <p className="text-xs text-slate-400">You will be redirected to PayPal (mock). No real charges.</p>
+                  <p className="text-xs text-slate-400">Vous serez redirigé vers PayPal (démonstration). Aucun prélèvement réel.</p>
                 </div>
               )}
             </div>
@@ -553,8 +553,8 @@ export function CheckoutPage({ slug }: { slug: string }) {
 
           {/* Summary */}
           <div className="space-y-5">
-            <div className="card p-5 sticky top-24">
-              <h3 className="text-base font-semibold mb-4">Order summary</h3>
+            <div className="card shadow-float p-5 sticky top-24">
+              <h3 className="text-base font-semibold mb-4">Récapitulatif de la commande</h3>
               <div className="space-y-2 mb-4">
                 {items.map((item) => (
                   <div key={item.product.id} className="flex items-center gap-2 text-sm">
@@ -589,10 +589,10 @@ export function CheckoutPage({ slug }: { slug: string }) {
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value)}
                       className="input text-sm"
-                      placeholder="Coupon code"
+                      placeholder="Code de réduction"
                     />
                     <Button size="sm" variant="outline" onClick={handleApplyCoupon} loading={applyingCoupon}>
-                      Apply
+                      Appliquer
                     </Button>
                   </div>
                 )}
@@ -600,12 +600,12 @@ export function CheckoutPage({ slug }: { slug: string }) {
 
               <div className="space-y-2 text-sm border-t border-slate-100 pt-4">
                 <div className="flex justify-between text-slate-500">
-                  <span>Subtotal</span>
+                  <span>Sous-total</span>
                   <span>{formatCurrency(subtotal)}</span>
                 </div>
                 {discount > 0 && (
                   <div className="flex justify-between text-turquoise-600">
-                    <span>Discount</span>
+                    <span>Remise</span>
                     <span>-{formatCurrency(discount)}</span>
                   </div>
                 )}
@@ -622,11 +622,11 @@ export function CheckoutPage({ slug }: { slug: string }) {
                 className="w-full mt-5"
                 size="lg"
               >
-                {processing ? 'Processing...' : `Pay ${formatCurrency(total)}`}
+                {processing ? 'Traitement...' : `Payer ${formatCurrency(total)}`}
               </Button>
 
               <p className="text-xs text-slate-400 text-center mt-3 flex items-center justify-center gap-1.5">
-                <ShieldCheck className="h-3.5 w-3.5" /> Secure mock checkout
+                <ShieldCheck className="h-3.5 w-3.5" /> Paiement de démonstration sécurisé
               </p>
             </div>
           </div>
@@ -672,24 +672,24 @@ function PaymentResult({
       </div>
 
       <h2 className="text-xl font-bold mb-2">
-        {isSuccess ? 'Payment successful!' : isPending ? 'Payment pending' : 'Payment failed'}
+        {isSuccess ? 'Paiement réussi !' : isPending ? 'Paiement en attente' : 'Échec du paiement'}
       </h2>
       <p className="text-sm text-slate-500 mb-1">
         {isSuccess
-          ? 'Your order is complete. Download links have been sent to your email.'
+          ? 'Votre commande est terminée. Les liens de téléchargement ont été envoyés à votre adresse e-mail.'
           : isPending
-          ? 'Your payment is being processed. We will notify you by email.'
-          : `Payment status: ${status.replace(/_/g, ' ')}. No charge was made.`}
+          ? 'Votre paiement est en cours de traitement. Nous vous enverrons une notification par e-mail.'
+          : `Statut du paiement : ${status.replace(/_/g, ' ')}. Aucun prélèvement effectué.`}
       </p>
       {email && <p className="text-sm text-slate-400 mb-4">{email}</p>}
 
       <div className="rounded-xl bg-slate-50 p-4 mb-6 text-left">
         <div className="flex justify-between text-sm mb-1">
-          <span className="text-slate-400">Reference</span>
+          <span className="text-slate-400">Référence</span>
           <span className="font-mono text-xs">{ref}</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-slate-400">Amount</span>
+          <span className="text-slate-400">Montant</span>
           <span className="font-semibold">{formatCurrency(total)}</span>
         </div>
       </div>
@@ -697,11 +697,11 @@ function PaymentResult({
       <div className="flex gap-3">
         {!isSuccess && (
           <Button variant="outline" className="flex-1" onClick={onRetry}>
-            Try again
+            Réessayer
           </Button>
         )}
         <Button className="flex-1" onClick={onContinue}>
-          {isSuccess ? 'Continue shopping' : 'Back to store'}
+          {isSuccess ? 'Continuer mes achats' : 'Retour à la boutique'}
         </Button>
       </div>
     </div>

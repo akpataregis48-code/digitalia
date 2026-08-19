@@ -30,7 +30,7 @@ export function AnalyticsPage() {
       setOrders(o);
       setProducts(p);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load analytics');
+      setError(err instanceof Error ? err.message : 'Échec du chargement des analyses');
     }
     setLoading(false);
   };
@@ -90,7 +90,7 @@ export function AnalyticsPage() {
     return { revenue, views, productViews, purchases, conversion, dailyViews, dailyRevenue, days, topProducts };
   }, [events, orders, products, range]);
 
-  if (loading) return <LoadingPage label="Loading analytics..." />;
+  if (loading) return <LoadingPage label="Chargement des analyses..." />;
   if (error) return <ErrorState message={error} onRetry={load} />;
 
   const maxViews = Math.max(...stats.dailyViews, 1);
@@ -99,8 +99,8 @@ export function AnalyticsPage() {
   return (
     <div>
       <DashboardPageHeader
-        title="Analytics"
-        description="Understand your store performance"
+        title="Analyses"
+        description="Comprenez les performances de votre boutique"
         action={
           <div className="flex gap-2">
             {([7, 30, 90] as const).map((r) => (
@@ -119,17 +119,17 @@ export function AnalyticsPage() {
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-        <StatCard label="Revenue" value={formatCurrency(stats.revenue)} icon={<DollarSign className="h-5 w-5" />} accent="turquoise" />
-        <StatCard label="Store views" value={formatNumber(stats.views)} icon={<Eye className="h-5 w-5" />} accent="sky" />
-        <StatCard label="Product views" value={formatNumber(stats.productViews)} icon={<BarChart3 className="h-5 w-5" />} accent="orange" />
+        <StatCard label="Revenus" value={formatCurrency(stats.revenue)} icon={<DollarSign className="h-5 w-5" />} accent="turquoise" />
+        <StatCard label="Vues de la boutique" value={formatNumber(stats.views)} icon={<Eye className="h-5 w-5" />} accent="sky" />
+        <StatCard label="Vues des produits" value={formatNumber(stats.productViews)} icon={<BarChart3 className="h-5 w-5" />} accent="orange" />
         <StatCard label="Conversion" value={`${stats.conversion.toFixed(1)}%`} icon={<TrendingUp className="h-5 w-5" />} accent="turquoise" />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-5 mb-5">
         {/* Views chart */}
         <Card className="p-6">
-          <h3 className="text-base font-semibold mb-1">Store views</h3>
-          <p className="text-sm text-slate-400 mb-5">{formatNumber(stats.views)} total views</p>
+          <h3 className="text-base font-semibold mb-1">Vues de la boutique</h3>
+          <p className="text-sm text-slate-400 mb-5">{formatNumber(stats.views)} vues au total</p>
           <div className="flex items-end justify-between gap-1 h-40">
             {stats.dailyViews.map((value, i) => {
               const heightPct = (value / maxViews) * 100;
@@ -143,7 +143,7 @@ export function AnalyticsPage() {
                   </div>
                   {(range <= 30 || i % Math.ceil(range / 10) === 0) && (
                     <span className="text-[10px] text-slate-400">
-                      {stats.days[i].toLocaleDateString('en', { month: 'numeric', day: 'numeric' })}
+                      {stats.days[i].toLocaleDateString('fr', { month: 'numeric', day: 'numeric' })}
                     </span>
                   )}
                 </div>
@@ -154,8 +154,8 @@ export function AnalyticsPage() {
 
         {/* Revenue chart */}
         <Card className="p-6">
-          <h3 className="text-base font-semibold mb-1">Revenue</h3>
-          <p className="text-sm text-slate-400 mb-5">{formatCurrency(stats.revenue)} total</p>
+          <h3 className="text-base font-semibold mb-1">Revenus</h3>
+          <p className="text-sm text-slate-400 mb-5">{formatCurrency(stats.revenue)} au total</p>
           <div className="flex items-end justify-between gap-1 h-40">
             {stats.dailyRevenue.map((value, i) => {
               const heightPct = (value / maxRev) * 100;
@@ -169,7 +169,7 @@ export function AnalyticsPage() {
                   </div>
                   {(range <= 30 || i % Math.ceil(range / 10) === 0) && (
                     <span className="text-[10px] text-slate-400">
-                      {stats.days[i].toLocaleDateString('en', { month: 'numeric', day: 'numeric' })}
+                      {stats.days[i].toLocaleDateString('fr', { month: 'numeric', day: 'numeric' })}
                     </span>
                   )}
                 </div>
@@ -181,12 +181,12 @@ export function AnalyticsPage() {
 
       {/* Top products */}
       <Card className="p-6">
-        <h3 className="text-base font-semibold mb-4">Top products by views</h3>
+        <h3 className="text-base font-semibold mb-4">Produits les plus vus</h3>
         {stats.topProducts.length === 0 ? (
           <EmptyState
             icon={<BarChart3 className="h-7 w-7" />}
-            title="No data yet"
-            description="Product views will appear here once visitors browse your storefront."
+            title="Aucune donnée pour le moment"
+            description="Les vues de produits apparaîtront ici dès que les visiteurs parcourront votre vitrine."
           />
         ) : (
           <div className="space-y-3">
@@ -208,7 +208,7 @@ export function AnalyticsPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-sky-600">{formatNumber(views)}</p>
-                  <p className="text-xs text-slate-400">views</p>
+                  <p className="text-xs text-slate-400">vues</p>
                 </div>
               </div>
             ))}

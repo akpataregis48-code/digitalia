@@ -42,7 +42,7 @@ export function DashboardOverview() {
     return () => { mounted = false; };
   }, [store]);
 
-  if (loading) return <LoadingPage label="Loading your dashboard..." />;
+  if (loading) return <LoadingPage label="Chargement de votre tableau de bord..." />;
 
   const revenue = orders
     .filter((o) => o.payment_status === 'success')
@@ -75,11 +75,11 @@ export function DashboardOverview() {
   return (
     <div>
       <DashboardPageHeader
-        title="Dashboard"
-        description="Your store at a glance"
+        title="Tableau de bord"
+        description="Votre boutique en un coup d'œil"
         action={
           <button onClick={() => navigate('/dashboard/products')} className="btn-primary btn-sm">
-            Add product
+            Ajouter un produit
             <ArrowRight className="h-4 w-4" />
           </button>
         }
@@ -87,10 +87,10 @@ export function DashboardOverview() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total revenue" value={formatCurrency(revenue)} icon={<DollarSign className="h-5 w-5" />} accent="turquoise" trendUp={revenue > 0} trend={revenue > 0 ? 'live' : undefined} />
-        <StatCard label="Orders" value={formatNumber(completedOrders)} icon={<ShoppingBag className="h-5 w-5" />} accent="sky" />
-        <StatCard label="Customers" value={formatNumber(customers.length)} icon={<Users className="h-5 w-5" />} accent="orange" />
-        <StatCard label="Visitors (30d)" value={formatNumber(eventCount)} icon={<Eye className="h-5 w-5" />} accent="turquoise" />
+        <StatCard label="Revenus totaux" value={formatCurrency(revenue)} icon={<DollarSign className="h-5 w-5" />} accent="turquoise" trendUp={revenue > 0} trend={revenue > 0 ? 'live' : undefined} />
+        <StatCard label="Commandes" value={formatNumber(completedOrders)} icon={<ShoppingBag className="h-5 w-5" />} accent="sky" />
+        <StatCard label="Clients" value={formatNumber(customers.length)} icon={<Users className="h-5 w-5" />} accent="orange" />
+        <StatCard label="Visiteurs (30 j)" value={formatNumber(eventCount)} icon={<Eye className="h-5 w-5" />} accent="turquoise" />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-5">
@@ -98,10 +98,10 @@ export function DashboardOverview() {
         <Card className="lg:col-span-2 p-6">
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h3 className="text-base font-semibold">Revenue, last 7 days</h3>
-              <p className="text-sm text-slate-400">{formatCurrency(revenueByDay.reduce((s, v) => s + v, 0))} total</p>
+              <h3 className="text-base font-semibold">Revenus, 7 derniers jours</h3>
+              <p className="text-sm text-slate-400">{formatCurrency(revenueByDay.reduce((s, v) => s + v, 0))} au total</p>
             </div>
-            <Badge variant="turquoise"><TrendingUp className="h-3 w-3" /> Live</Badge>
+            <Badge variant="turquoise"><TrendingUp className="h-3 w-3" /> En direct</Badge>
           </div>
           <div className="flex items-end justify-between gap-2 h-44">
             {revenueByDay.map((value, i) => {
@@ -117,7 +117,7 @@ export function DashboardOverview() {
                     />
                   </div>
                   <span className="text-xs text-slate-400 font-medium">
-                    {date.toLocaleDateString('en', { weekday: 'short' })}
+                    {date.toLocaleDateString('fr', { weekday: 'short' })}
                   </span>
                 </div>
               );
@@ -127,18 +127,18 @@ export function DashboardOverview() {
 
         {/* Product summary */}
         <Card className="p-6">
-          <h3 className="text-base font-semibold mb-4">Products</h3>
+          <h3 className="text-base font-semibold mb-4">Produits</h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 rounded-xl bg-turquoise-50">
-              <span className="text-sm font-medium text-turquoise-700">Published</span>
+              <span className="text-sm font-medium text-turquoise-700">Publiés</span>
               <span className="text-lg font-bold text-turquoise-700">{publishedProducts}</span>
             </div>
             <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50">
-              <span className="text-sm font-medium text-slate-600">Drafts</span>
+              <span className="text-sm font-medium text-slate-600">Brouillons</span>
               <span className="text-lg font-bold text-slate-600">{products.filter((p) => p.status === 'draft').length}</span>
             </div>
             <div className="flex items-center justify-between p-3 rounded-xl bg-orange-50">
-              <span className="text-sm font-medium text-orange-600">Archived</span>
+              <span className="text-sm font-medium text-orange-600">Archivés</span>
               <span className="text-lg font-bold text-orange-600">{products.filter((p) => p.status === 'archived').length}</span>
             </div>
           </div>
@@ -146,7 +146,7 @@ export function DashboardOverview() {
             onClick={() => navigate('/dashboard/products')}
             className="btn-outline w-full mt-4"
           >
-            Manage products
+            Gérer les produits
             <ArrowRight className="h-4 w-4" />
           </button>
         </Card>
@@ -155,25 +155,25 @@ export function DashboardOverview() {
       {/* Recent orders */}
       <Card className="mt-5 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-semibold">Recent orders</h3>
+          <h3 className="text-base font-semibold">Commandes récentes</h3>
           <button onClick={() => navigate('/dashboard/orders')} className="text-sm font-medium text-turquoise-600 hover:text-turquoise-700">
-            View all
+            Tout voir
           </button>
         </div>
         {recentOrders.length === 0 ? (
           <EmptyState
             icon={<Package className="h-7 w-7" />}
-            title="No orders yet"
-            description="Orders will appear here once customers start buying your products."
+            title="Aucune commande pour le moment"
+            description="Les commandes apparaîtront ici dès que vos clients commenceront à acheter vos produits."
           />
         ) : (
           <div className="overflow-x-auto -mx-6 px-6">
             <table className="w-full min-w-[560px]">
               <thead>
                 <tr className="border-b border-slate-100">
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider pb-3">Order</th>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider pb-3">Customer</th>
-                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider pb-3">Status</th>
+                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider pb-3">Commande</th>
+                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider pb-3">Client</th>
+                  <th className="text-left text-xs font-semibold text-slate-400 uppercase tracking-wider pb-3">Statut</th>
                   <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider pb-3">Total</th>
                   <th className="text-right text-xs font-semibold text-slate-400 uppercase tracking-wider pb-3">Date</th>
                 </tr>

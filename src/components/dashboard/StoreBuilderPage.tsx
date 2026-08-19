@@ -17,12 +17,12 @@ import {
 } from 'lucide-react';
 
 const BLOCK_LIBRARY: { type: StorefrontBlock['type']; label: string; icon: typeof Type; description: string }[] = [
-  { type: 'hero', label: 'Hero', icon: Layout, description: 'Big heading with call to action' },
-  { type: 'products', label: 'Products', icon: ShoppingBag, description: 'Grid of your products' },
-  { type: 'features', label: 'Features', icon: Star, description: 'Feature list with icons' },
-  { type: 'text', label: 'Text', icon: Type, description: 'Rich text section' },
-  { type: 'image', label: 'Image', icon: Image, description: 'Single image block' },
-  { type: 'banner', label: 'Banner', icon: BannerIcon, description: 'Colored announcement bar' },
+  { type: 'hero', label: 'Héros', icon: Layout, description: 'Grand titre avec appel à l’action' },
+  { type: 'products', label: 'Produits', icon: ShoppingBag, description: 'Grille de vos produits' },
+  { type: 'features', label: 'Atouts', icon: Star, description: 'Liste d’atouts avec icônes' },
+  { type: 'text', label: 'Texte', icon: Type, description: 'Section de texte enrichi' },
+  { type: 'image', label: 'Image', icon: Image, description: 'Bloc image unique' },
+  { type: 'banner', label: 'Bandeau', icon: BannerIcon, description: 'Barre d’annonce colorée' },
 ];
 
 const DEFAULT_THEME: StorefrontTheme = {
@@ -37,21 +37,21 @@ function makeBlock(type: StorefrontBlock['type']): StorefrontBlock {
   const id = uid('blk');
   switch (type) {
     case 'hero':
-      return { id, type, title: 'Premium digital products', subtitle: 'Instant downloads. Secure checkout.', ctaText: 'Browse products', bg: '#EAFBF6' };
+      return { id, type, title: 'Produits numériques premium', subtitle: 'Téléchargements instantanés. Paiement sécurisé.', ctaText: 'Voir les produits', bg: '#EAFBF6' };
     case 'products':
-      return { id, type, title: 'Featured products', limit: 6, columns: 3 };
+      return { id, type, title: 'Produits en vedette', limit: 6, columns: 3 };
     case 'features':
-      return { id, type, title: 'Why shop with us', items: [
-        { icon: 'Download', title: 'Instant download', text: 'Get files immediately.' },
-        { icon: 'ShieldCheck', title: 'Secure payments', text: 'Multiple payment methods.' },
-        { icon: 'RefreshCw', title: 'Lifetime updates', text: 'Free updates forever.' },
+      return { id, type, title: 'Pourquoi acheter chez nous', items: [
+        { icon: 'Download', title: 'Téléchargement instantané', text: 'Recevez vos fichiers immédiatement.' },
+        { icon: 'ShieldCheck', title: 'Paiements sécurisés', text: 'Plusieurs moyens de paiement.' },
+        { icon: 'RefreshCw', title: 'Mises à jour à vie', text: 'Des mises à jour gratuites pour toujours.' },
       ]};
     case 'text':
-      return { id, type, title: 'About our store', body: 'We create premium digital products for creators and professionals.' };
+      return { id, type, title: 'À propos de notre boutique', body: 'Nous créons des produits numériques premium pour créateurs et professionnels.' };
     case 'image':
       return { id, type, src: '', caption: '', rounded: true };
     case 'banner':
-      return { id, type, text: 'Free shipping on all digital products!', bg: '#FF8A3D' };
+      return { id, type, text: 'Livraison gratuite sur tous les produits numériques !', bg: '#FF8A3D' };
   }
 }
 
@@ -136,7 +136,7 @@ export function StoreBuilderPage() {
       setBlocks(sf.blocks || []);
       setLoading(false);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load builder');
+      setError(e instanceof Error ? e.message : 'Échec du chargement de l’éditeur');
     }
     setLoading(false);
   };
@@ -151,9 +151,9 @@ export function StoreBuilderPage() {
     try {
       const sf = await saveStorefront(store.id, theme, blocks);
       setStorefront(sf);
-      toast('Draft saved');
+      toast('Brouillon enregistré');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to save', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de l’enregistrement', 'error');
     }
     setSaving(false);
   };
@@ -166,10 +166,10 @@ export function StoreBuilderPage() {
       if (!store.published) {
         await updateStore(store.id, { published: true });
       }
-      toast('Store published! Your storefront is live.');
+      toast('Boutique publiée ! Votre vitrine est en ligne.');
       setPublishOpen(false);
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to publish', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de la publication', 'error');
     }
     setPublishing(false);
   };
@@ -241,9 +241,9 @@ export function StoreBuilderPage() {
     setDragOverIdx(null);
   };
 
-  if (loading) return <LoadingPage label="Loading store builder..." />;
+  if (loading) return <LoadingPage label="Chargement de l'éditeur de boutique..." />;
   if (error) return <ErrorState message={error} onRetry={load} />;
-  if (!store) return <EmptyState icon={<Layout className="h-7 w-7" />} title="No store" description="Create a store first." />;
+  if (!store) return <EmptyState icon={<Layout className="h-7 w-7" />} title="Aucune boutique" description="Créez d'abord une boutique." />;
 
   const selectedBlock = blocks.find((b) => b.id === selectedId) || null;
 
@@ -256,11 +256,11 @@ export function StoreBuilderPage() {
             onClick={() => navigate('/dashboard')}
             className="text-sm text-slate-400 hover:text-ink transition-colors flex items-center gap-1.5"
           >
-            ← Dashboard
+            ← Tableau de bord
           </button>
           <span className="text-slate-200">/</span>
-          <span className="text-sm font-semibold">Store Builder</span>
-          <span className="badge-slate ml-2">Draft</span>
+          <span className="text-sm font-semibold">Éditeur de boutique</span>
+          <span className="badge-slate ml-2">Brouillon</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -286,7 +286,7 @@ export function StoreBuilderPage() {
             onClick={undo}
             disabled={history.length === 0}
             className="h-8 w-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            title="Undo"
+            title="Annuler"
           >
             <Undo2 className="h-4 w-4" />
           </button>
@@ -294,7 +294,7 @@ export function StoreBuilderPage() {
             onClick={redo}
             disabled={future.length === 0}
             className="h-8 w-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            title="Redo"
+            title="Rétablir"
           >
             <Redo2 className="h-4 w-4" />
           </button>
@@ -302,29 +302,29 @@ export function StoreBuilderPage() {
           <div className="w-px h-6 bg-slate-200" />
 
           <Button variant="outline" size="sm" onClick={handleSave} loading={saving} icon={<Save className="h-3.5 w-3.5" />}>
-            Save
+            Enregistrer
           </Button>
           <div className="relative">
             <Button size="sm" onClick={() => setPublishOpen(!publishOpen)} icon={<Send className="h-3.5 w-3.5" />}>
-              Publish
+              Publier
               <ChevronDown className="h-3 w-3" />
             </Button>
             {publishOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setPublishOpen(false)} />
-                <div className="absolute right-0 top-10 z-50 w-64 bg-white rounded-xl shadow-lift border border-slate-100 p-4 animate-scale-in">
-                  <p className="text-sm font-semibold mb-1">Publish your store</p>
+                <div className="absolute right-0 top-10 z-50 w-64 bg-white/95 backdrop-blur-md rounded-xl shadow-float border border-slate-100 p-4 animate-scale-in">
+                  <p className="text-sm font-semibold mb-1">Publier votre boutique</p>
                   <p className="text-xs text-slate-400 mb-3">
-                    This makes your latest design live on your public storefront.
+                    Votre dernier design sera mis en ligne sur votre vitrine publique.
                   </p>
                   <Button size="sm" className="w-full" onClick={handlePublish} loading={publishing} icon={<Check className="h-3.5 w-3.5" />}>
-                    Publish now
+                    Publier maintenant
                   </Button>
                   <button
                     onClick={() => { navigate(`/store/${store.slug}`); setPublishOpen(false); }}
                     className="w-full mt-2 text-xs text-slate-500 hover:text-ink py-1.5"
                   >
-                    Preview storefront →
+                    Aperçu de la vitrine →
                   </button>
                 </div>
               </>
@@ -338,7 +338,7 @@ export function StoreBuilderPage() {
         {/* Block library */}
         <div className="w-48 lg:w-56 bg-white border-r border-slate-100 overflow-y-auto scrollbar-thin shrink-0 hidden md:block">
           <div className="p-3">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">Blocks</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">Blocs</p>
             <div className="space-y-1.5">
               {BLOCK_LIBRARY.map((item) => (
                 <button
@@ -367,7 +367,7 @@ export function StoreBuilderPage() {
           <div className="py-6 px-4 flex justify-center">
             <div
               className={classNames(
-                'bg-white rounded-2xl shadow-card transition-all duration-300',
+                'bg-white rounded-2xl shadow-float transition-all duration-300',
                 device === 'mobile' ? 'w-[375px]' : 'w-full max-w-3xl'
               )}
             >
@@ -389,8 +389,8 @@ export function StoreBuilderPage() {
                 <div className="p-12">
                   <EmptyState
                     icon={<Layout className="h-7 w-7" />}
-                    title="Your canvas is empty"
-                    description="Drag or click blocks from the left to build your storefront."
+                    title="Votre toile est vide"
+                    description="Faites glisser ou cliquez sur les blocs de gauche pour construire votre vitrine."
                   />
                 </div>
               ) : (
@@ -627,27 +627,27 @@ function BlockInspector({
 }) {
   return (
     <div className="p-4">
-      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Block settings</p>
-      <p className="text-sm font-semibold capitalize mb-4">{block.type} block</p>
+      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Réglages du bloc</p>
+      <p className="text-sm font-semibold capitalize mb-4">bloc {block.type}</p>
 
       {block.type === 'hero' && (
         <div className="space-y-3">
-          <Field label="Title"><input className="input" value={block.title} onChange={(e) => onUpdate({ title: e.target.value } as Partial<StorefrontBlock>)} /></Field>
-          <Field label="Subtitle"><textarea className="input min-h-[60px]" value={block.subtitle} onChange={(e) => onUpdate({ subtitle: e.target.value } as Partial<StorefrontBlock>)} /></Field>
-          <Field label="CTA text"><input className="input" value={block.ctaText} onChange={(e) => onUpdate({ ctaText: e.target.value } as Partial<StorefrontBlock>)} /></Field>
-          <Field label="Background color"><ColorInput value={block.bg} onChange={(v) => onUpdate({ bg: v } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="Titre"><input className="input" value={block.title} onChange={(e) => onUpdate({ title: e.target.value } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="Sous-titre"><textarea className="input min-h-[60px]" value={block.subtitle} onChange={(e) => onUpdate({ subtitle: e.target.value } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="Texte du bouton"><input className="input" value={block.ctaText} onChange={(e) => onUpdate({ ctaText: e.target.value } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="Couleur de fond"><ColorInput value={block.bg} onChange={(v) => onUpdate({ bg: v } as Partial<StorefrontBlock>)} /></Field>
         </div>
       )}
 
       {block.type === 'products' && (
         <div className="space-y-3">
-          <Field label="Title"><input className="input" value={block.title} onChange={(e) => onUpdate({ title: e.target.value } as Partial<StorefrontBlock>)} /></Field>
-          <Field label="Max products"><input type="number" className="input" value={block.limit} onChange={(e) => onUpdate({ limit: parseInt(e.target.value) || 6 } as Partial<StorefrontBlock>)} /></Field>
-          <Field label="Columns">
+          <Field label="Titre"><input className="input" value={block.title} onChange={(e) => onUpdate({ title: e.target.value } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="Nombre max de produits"><input type="number" className="input" value={block.limit} onChange={(e) => onUpdate({ limit: parseInt(e.target.value) || 6 } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="Colonnes">
             <select className="input" value={block.columns} onChange={(e) => onUpdate({ columns: parseInt(e.target.value) || 3 } as Partial<StorefrontBlock>)}>
-              <option value={2}>2 columns</option>
-              <option value={3}>3 columns</option>
-              <option value={4}>4 columns</option>
+              <option value={2}>2 colonnes</option>
+              <option value={3}>3 colonnes</option>
+              <option value={4}>4 colonnes</option>
             </select>
           </Field>
         </div>
@@ -655,11 +655,11 @@ function BlockInspector({
 
       {block.type === 'features' && (
         <div className="space-y-3">
-          <Field label="Title"><input className="input" value={block.title} onChange={(e) => onUpdate({ title: e.target.value } as Partial<StorefrontBlock>)} /></Field>
-          <p className="text-xs font-semibold text-slate-400 pt-2">Items</p>
+          <Field label="Titre"><input className="input" value={block.title} onChange={(e) => onUpdate({ title: e.target.value } as Partial<StorefrontBlock>)} /></Field>
+          <p className="text-xs font-semibold text-slate-400 pt-2">Atouts</p>
           {block.items.map((item, i) => (
             <div key={i} className="rounded-xl bg-slate-50 p-3 space-y-2">
-              <input className="input text-sm" value={item.title} placeholder="Title" onChange={(e) => {
+              <input className="input text-sm" value={item.title} placeholder="Titre" onChange={(e) => {
                 const items = [...block.items];
                 items[i] = { ...item, title: e.target.value };
                 onUpdate({ items } as Partial<StorefrontBlock>);
@@ -676,26 +676,26 @@ function BlockInspector({
 
       {block.type === 'text' && (
         <div className="space-y-3">
-          <Field label="Title"><input className="input" value={block.title} onChange={(e) => onUpdate({ title: e.target.value } as Partial<StorefrontBlock>)} /></Field>
-          <Field label="Body"><textarea className="input min-h-[120px]" value={block.body} onChange={(e) => onUpdate({ body: e.target.value } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="Titre"><input className="input" value={block.title} onChange={(e) => onUpdate({ title: e.target.value } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="Corps du texte"><textarea className="input min-h-[120px]" value={block.body} onChange={(e) => onUpdate({ body: e.target.value } as Partial<StorefrontBlock>)} /></Field>
         </div>
       )}
 
       {block.type === 'image' && (
         <div className="space-y-3">
-          <Field label="Image URL"><input className="input" value={block.src} onChange={(e) => onUpdate({ src: e.target.value } as Partial<StorefrontBlock>)} placeholder="https://..." /></Field>
-          <Field label="Caption"><input className="input" value={block.caption} onChange={(e) => onUpdate({ caption: e.target.value } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="URL de l'image"><input className="input" value={block.src} onChange={(e) => onUpdate({ src: e.target.value } as Partial<StorefrontBlock>)} placeholder="https://..." /></Field>
+          <Field label="Légende"><input className="input" value={block.caption} onChange={(e) => onUpdate({ caption: e.target.value } as Partial<StorefrontBlock>)} /></Field>
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={block.rounded} onChange={(e) => onUpdate({ rounded: e.target.checked } as Partial<StorefrontBlock>)} className="rounded" />
-            Rounded corners
+            Coins arrondis
           </label>
         </div>
       )}
 
       {block.type === 'banner' && (
         <div className="space-y-3">
-          <Field label="Text"><input className="input" value={block.text} onChange={(e) => onUpdate({ text: e.target.value } as Partial<StorefrontBlock>)} /></Field>
-          <Field label="Background color"><ColorInput value={block.bg} onChange={(v) => onUpdate({ bg: v } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="Texte"><input className="input" value={block.text} onChange={(e) => onUpdate({ text: e.target.value } as Partial<StorefrontBlock>)} /></Field>
+          <Field label="Couleur de fond"><ColorInput value={block.bg} onChange={(v) => onUpdate({ bg: v } as Partial<StorefrontBlock>)} /></Field>
         </div>
       )}
     </div>
@@ -705,19 +705,19 @@ function BlockInspector({
 function ThemeInspector({ theme, onUpdate }: { theme: StorefrontTheme; onUpdate: (patch: Partial<StorefrontTheme>) => void }) {
   return (
     <div className="p-4">
-      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Theme</p>
-      <p className="text-sm text-slate-400 mb-4">Select a block to edit it, or adjust your theme below.</p>
+      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Thème</p>
+      <p className="text-sm text-slate-400 mb-4">Sélectionnez un bloc pour le modifier, ou ajustez votre thème ci-dessous.</p>
       <div className="space-y-4">
-        <Field label="Primary color"><ColorInput value={theme.primary} onChange={(v) => onUpdate({ primary: v })} /></Field>
-        <Field label="Accent color"><ColorInput value={theme.accent} onChange={(v) => onUpdate({ accent: v })} /></Field>
-        <Field label="Corner radius">
+        <Field label="Couleur principale"><ColorInput value={theme.primary} onChange={(v) => onUpdate({ primary: v })} /></Field>
+        <Field label="Couleur d'accent"><ColorInput value={theme.accent} onChange={(v) => onUpdate({ accent: v })} /></Field>
+        <Field label="Rayon des coins">
           <input type="range" min={0} max={32} value={theme.radius} onChange={(e) => onUpdate({ radius: parseInt(e.target.value) })} className="w-full" />
           <p className="text-xs text-slate-400 mt-1">{theme.radius}px</p>
         </Field>
-        <Field label="Layout">
+        <Field label="Disposition">
           <select className="input" value={theme.layout} onChange={(e) => onUpdate({ layout: e.target.value as 'centered' | 'full' })}>
-            <option value="centered">Centered</option>
-            <option value="full">Full width</option>
+            <option value="centered">Centrée</option>
+            <option value="full">Pleine largeur</option>
           </select>
         </Field>
       </div>

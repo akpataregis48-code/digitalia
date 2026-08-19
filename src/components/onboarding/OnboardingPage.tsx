@@ -8,7 +8,7 @@ import { supabase } from '@/lib/supabase';
 import { slugify } from '@/lib/utils';
 import { Sparkles, ArrowRight, ArrowLeft, Check, Store, Globe, Tag } from 'lucide-react';
 
-const CATEGORIES = ['Ebooks', 'Courses', 'Templates', 'Presets', 'Music', 'Software', 'Design', 'Photography', 'Other'];
+const CATEGORIES = ['E-books', 'Cours', 'Modèles', 'Préréglages', 'Musique', 'Logiciels', 'Design', 'Photographie', 'Autre'];
 
 export function OnboardingPage() {
   const { user, updateProfile } = useAuth();
@@ -24,7 +24,7 @@ export function OnboardingPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const steps = ['Store name', 'Store details', 'Category'];
+  const steps = ['Nom de la boutique', 'Détails de la boutique', 'Catégorie'];
 
   const handleSlugChange = (value: string) => {
     setSlug(slugify(value));
@@ -32,7 +32,7 @@ export function OnboardingPage() {
 
   const handleNext = () => {
     if (step === 0 && !storeName.trim()) {
-      setError('Please enter a store name');
+      setError('Veuillez saisir un nom de boutique');
       return;
     }
     if (step === 0 && !slug.trim()) {
@@ -63,12 +63,12 @@ export function OnboardingPage() {
       await ensureStorefront(store.id);
       await updateProfile({ onboarding_complete: true });
       await refreshStore();
-      toast('Your store is ready!');
+      toast('Votre boutique est prête !');
       navigate('/dashboard');
     } catch (e) {
-      const msg = e instanceof Error ? e.message : 'Failed to create store';
+      const msg = e instanceof Error ? e.message : 'Échec de la création de la boutique';
       if (msg.includes('duplicate') || msg.includes('unique')) {
-        setError('That store URL is already taken. Try another.');
+        setError('Cette URL de boutique est déjà prise. Essayez-en une autre.');
       } else {
         setError(msg);
       }
@@ -88,7 +88,7 @@ export function OnboardingPage() {
               </div>
               <span className="text-base font-bold tracking-tight">Digitalia</span>
             </div>
-            <p className="text-sm text-slate-400">Step {step + 1} of {steps.length}</p>
+            <p className="text-sm text-slate-400">Étape {step + 1} sur {steps.length}</p>
           </div>
         </div>
 
@@ -109,19 +109,19 @@ export function OnboardingPage() {
         {/* Content */}
         <div className="flex-1 flex items-center justify-center px-5 py-10">
           <div className="w-full max-w-md">
-            <div className="bg-white rounded-3xl shadow-card border border-slate-100 p-7 animate-scale-in">
+            <div className="bg-white rounded-3xl shadow-float border border-slate-100 p-7 animate-scale-in">
               {step === 0 && (
                 <div>
                   <div className="h-12 w-12 rounded-2xl bg-turquoise-50 flex items-center justify-center mb-5">
                     <Store className="h-6 w-6 text-turquoise-500" />
                   </div>
-                  <h1 className="text-h3 mb-2">Name your store</h1>
+                  <h1 className="text-h3 mb-2">Nommez votre boutique</h1>
                   <p className="text-sm text-slate-500 mb-6">
-                    This is how your store appears to customers. You can change it later.
+                    C'est ainsi que votre boutique apparaît aux clients. Vous pourrez la modifier plus tard.
                   </p>
                   <div className="space-y-4">
                     <div>
-                      <label className="label" htmlFor="storeName">Store name</label>
+                      <label className="label" htmlFor="storeName">Nom de la boutique</label>
                       <input
                         id="storeName"
                         value={storeName}
@@ -130,12 +130,12 @@ export function OnboardingPage() {
                           setSlug(slugify(e.target.value));
                         }}
                         className="input"
-                        placeholder="e.g. Creative Templates Co."
+                        placeholder="ex. Creative Templates Co."
                         autoFocus
                       />
                     </div>
                     <div>
-                      <label className="label" htmlFor="slug">Store URL</label>
+                      <label className="label" htmlFor="slug">URL de la boutique</label>
                       <div className="flex items-center rounded-xl border border-slate-200 bg-white focus-within:border-turquoise-400 focus-within:ring-4 focus-within:ring-turquoise-400/15 transition-all">
                         <span className="pl-3.5 pr-1 text-sm text-slate-400 whitespace-nowrap">digitalia.store/</span>
                         <input
@@ -143,7 +143,7 @@ export function OnboardingPage() {
                           value={slug}
                           onChange={(e) => handleSlugChange(e.target.value)}
                           className="flex-1 border-0 bg-transparent px-1 py-3 text-sm focus:outline-none"
-                          placeholder="your-shop"
+                          placeholder="votre-boutique"
                         />
                       </div>
                     </div>
@@ -156,19 +156,19 @@ export function OnboardingPage() {
                   <div className="h-12 w-12 rounded-2xl bg-sky-50 flex items-center justify-center mb-5">
                     <Globe className="h-6 w-6 text-sky-500" />
                   </div>
-                  <h1 className="text-h3 mb-2">Add some details</h1>
+                  <h1 className="text-h3 mb-2">Ajoutez quelques détails</h1>
                   <p className="text-sm text-slate-500 mb-6">
-                    Help customers understand what your store is about.
+                    Aidez les clients à comprendre à quoi sert votre boutique.
                   </p>
                   <div className="space-y-4">
                     <div>
-                      <label className="label" htmlFor="tagline">Tagline</label>
+                      <label className="label" htmlFor="tagline">Slogan</label>
                       <input
                         id="tagline"
                         value={tagline}
                         onChange={(e) => setTagline(e.target.value)}
                         className="input"
-                        placeholder="Premium digital products for creators"
+                        placeholder="Produits numériques premium pour créateurs"
                         autoFocus
                       />
                     </div>
@@ -179,7 +179,7 @@ export function OnboardingPage() {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         className="input min-h-[90px] resize-y"
-                        placeholder="Tell customers what makes your store special..."
+                        placeholder="Expliquez ce qui rend votre boutique unique..."
                       />
                     </div>
                   </div>
@@ -191,9 +191,9 @@ export function OnboardingPage() {
                   <div className="h-12 w-12 rounded-2xl bg-orange-50 flex items-center justify-center mb-5">
                     <Tag className="h-6 w-6 text-orange-500" />
                   </div>
-                  <h1 className="text-h3 mb-2">What will you sell?</h1>
+                  <h1 className="text-h3 mb-2">Que voulez-vous vendre ?</h1>
                   <p className="text-sm text-slate-500 mb-6">
-                    Pick the category that best fits your products.
+                    Choisissez la catégorie qui correspond le mieux à vos produits.
                   </p>
                   <div className="grid grid-cols-3 gap-2.5">
                     {CATEGORIES.map((cat) => (
@@ -216,8 +216,8 @@ export function OnboardingPage() {
                         <Check className="h-5 w-5 text-turquoise-600" strokeWidth={3} />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold">{storeName || 'Your store'}</p>
-                        <p className="text-xs text-slate-400">digitalia.store/{slug || 'your-shop'}</p>
+                        <p className="text-sm font-semibold">{storeName || 'Votre boutique'}</p>
+                        <p className="text-xs text-slate-400">digitalia.store/{slug || 'votre-boutique'}</p>
                       </div>
                     </div>
                   </div>
@@ -237,11 +237,11 @@ export function OnboardingPage() {
                   className="btn-ghost disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   <ArrowLeft className="h-4 w-4" />
-                  Back
+                  Retour
                 </button>
                 {step < steps.length - 1 ? (
                   <button onClick={handleNext} className="btn-primary">
-                    Continue
+                    Continuer
                     <ArrowRight className="h-4 w-4" />
                   </button>
                 ) : (
@@ -250,7 +250,7 @@ export function OnboardingPage() {
                       <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
-                        Create store
+                        Créer la boutique
                         <Check className="h-4 w-4" />
                       </>
                     )}

@@ -23,13 +23,13 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
           </button>
           <div className="max-w-md">
             <h2 className="text-h2 mb-4 text-balance">
-              Sell digital products, beautifully
+              Vendez vos produits numériques, en toute beauté
             </h2>
             <p className="text-slate-500 text-balance">
-              Store builder, secure checkout, analytics, and AI mock studio — all in one platform built for creators.
+              Éditeur de boutique, paiement sécurisé, statistiques et AI Mock Studio — le tout dans une plateforme pensée pour les créateurs.
             </p>
             <div className="mt-8 space-y-3">
-              {['No code required', 'Free forever plan', 'Setup in minutes'].map((item) => (
+              {['Aucun code requis', 'Plan gratuit pour toujours', 'Configuration en quelques minutes'].map((item) => (
                 <div key={item} className="flex items-center gap-3">
                   <div className="h-5 w-5 rounded-full bg-turquoise-400 flex items-center justify-center">
                     <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -62,7 +62,7 @@ export function AuthLayout({ children, title, subtitle }: { children: ReactNode;
               className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-ink transition-colors mb-6 lg:hidden"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to home
+              Retour à l'accueil
             </button>
             <h1 className="text-h3 mb-2">{title}</h1>
             <p className="text-sm text-slate-500 mb-7">{subtitle}</p>
@@ -87,7 +87,7 @@ export function SignInPage() {
     e.preventDefault();
     setError(null);
     if (!email || !password) {
-      setError('Please enter your email and password');
+      setError('Veuillez saisir votre e-mail et votre mot de passe');
       return;
     }
     setLoading(true);
@@ -97,15 +97,15 @@ export function SignInPage() {
       setError(signInError);
       return;
     }
-    toast('Welcome back!');
+    toast('Bon retour parmi nous !');
     navigate('/dashboard');
   };
 
   return (
-    <AuthLayout title="Sign in" subtitle="Welcome back. Sign in to manage your store.">
+    <AuthLayout title="Se connecter" subtitle="Bon retour. Connectez-vous pour gérer votre boutique.">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="label" htmlFor="email">Email</label>
+          <label className="label" htmlFor="email">E-mail</label>
           <div className="relative">
             <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
@@ -114,13 +114,13 @@ export function SignInPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input pl-10"
-              placeholder="you@example.com"
+              placeholder="vous@exemple.com"
               autoComplete="email"
             />
           </div>
         </div>
         <div>
-          <label className="label" htmlFor="password">Password</label>
+          <label className="label" htmlFor="password">Mot de passe</label>
           <div className="relative">
             <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
@@ -144,16 +144,16 @@ export function SignInPage() {
             <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           ) : (
             <>
-              Sign in
+              Se connecter
               <ArrowRight className="h-4 w-4" />
             </>
           )}
         </button>
       </form>
       <p className="mt-6 text-sm text-slate-500 text-center">
-        No account yet?{' '}
+        Pas encore de compte ?{' '}
         <button onClick={() => navigate('/signup')} className="font-semibold text-turquoise-600 hover:text-turquoise-700">
-          Create one
+          Créer un compte
         </button>
       </p>
     </AuthLayout>
@@ -174,11 +174,11 @@ export function SignUpPage() {
     e.preventDefault();
     setError(null);
     if (!fullName || !email || !password) {
-      setError('Please fill in all fields');
+      setError('Veuillez remplir tous les champs');
       return;
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError('Le mot de passe doit contenir au moins 6 caractères');
       return;
     }
     setLoading(true);
@@ -188,15 +188,15 @@ export function SignUpPage() {
       setError(signUpError);
       return;
     }
-    toast('Account created! Let us set up your store.');
+    toast('Compte créé ! Configurons votre boutique.');
     navigate('/onboarding');
   };
 
   return (
-    <AuthLayout title="Create your account" subtitle="Start selling digital products in minutes.">
+    <AuthLayout title="Créer votre compte" subtitle="Commencez à vendre des produits numériques en quelques minutes.">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="label" htmlFor="fullName">Full name</label>
+          <label className="label" htmlFor="fullName">Nom complet</label>
           <div className="relative">
             <UserIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
@@ -211,7 +211,7 @@ export function SignUpPage() {
           </div>
         </div>
         <div>
-          <label className="label" htmlFor="email">Email</label>
+          <label className="label" htmlFor="email">E-mail</label>
           <div className="relative">
             <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
@@ -220,13 +220,13 @@ export function SignUpPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input pl-10"
-              placeholder="you@example.com"
+              placeholder="vous@exemple.com"
               autoComplete="email"
             />
           </div>
         </div>
         <div>
-          <label className="label" htmlFor="password">Password</label>
+          <label className="label" htmlFor="password">Mot de passe</label>
           <div className="relative">
             <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
@@ -235,7 +235,7 @@ export function SignUpPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input pl-10"
-              placeholder="At least 6 characters"
+              placeholder="Au moins 6 caractères"
               autoComplete="new-password"
             />
           </div>
@@ -250,16 +250,16 @@ export function SignUpPage() {
             <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           ) : (
             <>
-              Create account
+              Créer le compte
               <ArrowRight className="h-4 w-4" />
             </>
           )}
         </button>
       </form>
       <p className="mt-6 text-sm text-slate-500 text-center">
-        Already have an account?{' '}
+        Vous avez déjà un compte ?{' '}
         <button onClick={() => navigate('/signin')} className="font-semibold text-turquoise-600 hover:text-turquoise-700">
-          Sign in
+          Se connecter
         </button>
       </p>
     </AuthLayout>

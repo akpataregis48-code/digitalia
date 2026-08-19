@@ -95,7 +95,7 @@ export async function getProductBySlug(storeId: string, slug: string): Promise<P
 }
 
 export async function createProduct(storeId: string, input: Partial<Product>): Promise<Product> {
-  const title = input.title || 'Untitled product';
+  const title = input.title || 'Produit sans titre';
   const slug = slugify(input.slug || title);
   const { data, error } = await supabase
     .from('products')
@@ -377,14 +377,14 @@ export async function validateCoupon(storeId: string, code: string): Promise<{ v
     .eq('code', code.toUpperCase().trim())
     .maybeSingle();
   if (error) throw error;
-  if (!data) return { valid: false, coupon: null, message: 'Coupon not found' };
+  if (!data) return { valid: false, coupon: null, message: 'Coupon introuvable' };
   const coupon = data as Coupon;
-  if (!coupon.active) return { valid: false, coupon, message: 'Coupon is inactive' };
+  if (!coupon.active) return { valid: false, coupon, message: 'Coupon inactif' };
   if (coupon.max_uses !== null && coupon.used_count >= coupon.max_uses)
-    return { valid: false, coupon, message: 'Coupon usage limit reached' };
+    return { valid: false, coupon, message: 'Limite d’utilisation du coupon atteinte' };
   if (coupon.expires_at && new Date(coupon.expires_at) < new Date())
-    return { valid: false, coupon, message: 'Coupon has expired' };
-  return { valid: true, coupon, message: 'Coupon applied' };
+    return { valid: false, coupon, message: 'Coupon expiré' };
+  return { valid: true, coupon, message: 'Coupon appliqué' };
 }
 
 // ---------- Storefronts ----------
@@ -400,26 +400,26 @@ export const DEFAULT_BLOCKS: StorefrontBlock[] = [
   {
     id: uid('blk'),
     type: 'hero',
-    title: 'Premium digital products for creators',
-    subtitle: 'Instant downloads. Secure checkout. Lifetime access.',
-    ctaText: 'Browse products',
+    title: 'Produits numériques premium pour créateurs',
+    subtitle: 'Téléchargements instantanés. Paiement sécurisé. Accès à vie.',
+    ctaText: 'Voir les produits',
     bg: '#EAFBF6',
   },
   {
     id: uid('blk'),
     type: 'products',
-    title: 'Featured products',
+    title: 'Produits en vedette',
     limit: 6,
     columns: 3,
   },
   {
     id: uid('blk'),
     type: 'features',
-    title: 'Why shop with us',
+    title: 'Pourquoi acheter chez nous',
     items: [
-      { icon: 'Download', title: 'Instant download', text: 'Get your files immediately after checkout.' },
-      { icon: 'ShieldCheck', title: 'Secure payments', text: 'Card, mobile money, and PayPal supported.' },
-      { icon: 'RefreshCw', title: 'Lifetime updates', text: 'Free updates for every product you buy.' },
+      { icon: 'Download', title: 'Téléchargement instantané', text: 'Recevez vos fichiers immédiatement après le paiement.' },
+      { icon: 'ShieldCheck', title: 'Paiements sécurisés', text: 'Carte, Mobile Money et PayPal pris en charge.' },
+      { icon: 'RefreshCw', title: 'Mises à jour à vie', text: 'Des mises à jour gratuites pour chaque produit acheté.' },
     ],
   },
 ];

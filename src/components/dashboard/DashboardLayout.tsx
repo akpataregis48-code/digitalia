@@ -18,16 +18,16 @@ type NavItem = {
 };
 
 const NAV: NavItem[] = [
-  { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard' },
-  { label: 'Products', icon: Package, to: '/dashboard/products' },
-  { label: 'Orders', icon: ShoppingBag, to: '/dashboard/orders' },
-  { label: 'Customers', icon: Users, to: '/dashboard/customers' },
+  { label: 'Tableau de bord', icon: LayoutDashboard, to: '/dashboard' },
+  { label: 'Produits', icon: Package, to: '/dashboard/products' },
+  { label: 'Commandes', icon: ShoppingBag, to: '/dashboard/orders' },
+  { label: 'Clients', icon: Users, to: '/dashboard/customers' },
   { label: 'Coupons', icon: Tag, to: '/dashboard/coupons' },
   { label: 'Marketing', icon: Megaphone, to: '/dashboard/marketing' },
-  { label: 'Analytics', icon: BarChart3, to: '/dashboard/analytics' },
-  { label: 'Store Builder', icon: Palette, to: '/dashboard/builder' },
+  { label: 'Analyses', icon: BarChart3, to: '/dashboard/analytics' },
+  { label: 'Éditeur de boutique', icon: Palette, to: '/dashboard/builder' },
   { label: 'AI Mock Studio', icon: Wand2, to: '/dashboard/ai-studio' },
-  { label: 'Settings', icon: Settings, to: '/dashboard/settings' },
+  { label: 'Paramètres', icon: Settings, to: '/dashboard/settings' },
 ];
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
@@ -40,7 +40,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
 
   const handleSignOut = async () => {
     await signOut();
-    toast('Signed out');
+    toast('Déconnexion réussie');
     navigate('/');
   };
 
@@ -54,7 +54,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Sidebar - desktop */}
       <aside
         className={classNames(
-          'fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-100 flex flex-col transition-transform duration-300 lg:translate-x-0',
+          'fixed inset-y-0 left-0 z-50 w-64 bg-white/95 backdrop-blur-md border-r border-slate-100 flex flex-col transition-transform duration-300 lg:translate-x-0 lg:shadow-card',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -84,7 +84,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold truncate">{store?.name || 'Your store'}</p>
+              <p className="text-sm font-semibold truncate">{store?.name || 'Votre boutique'}</p>
               <p className="text-xs text-slate-400 truncate">digitalia.store/{store?.slug || '...'}</p>
             </div>
           </button>
@@ -121,7 +121,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               {initials(profile?.full_name || user?.email)}
             </div>
             <div className="flex-1 min-w-0 text-left">
-              <p className="text-sm font-semibold truncate">{profile?.full_name || 'Account'}</p>
+              <p className="text-sm font-semibold truncate">{profile?.full_name || 'Compte'}</p>
               <p className="text-xs text-slate-400 truncate">{user?.email}</p>
             </div>
             <ChevronDown className="h-4 w-4 text-slate-400" />
@@ -129,13 +129,13 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           {menuOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-              <div className="absolute bottom-16 left-3 right-3 bg-white rounded-xl shadow-lift border border-slate-100 py-1.5 z-50 animate-scale-in">
+              <div className="absolute bottom-16 left-3 right-3 bg-white/95 backdrop-blur-md rounded-xl shadow-float border border-slate-100 py-1.5 z-50 animate-scale-in">
                 <button
                   onClick={() => { handleSignOut(); setMenuOpen(false); }}
                   className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-colors"
                 >
                   <LogOut className="h-4 w-4" />
-                  Sign out
+                  Se déconnecter
                 </button>
               </div>
             </>
@@ -149,7 +149,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
       {/* Main */}
       <div className="flex-1 lg:pl-64 min-w-0">
         {/* Mobile top bar */}
-        <div className="lg:hidden h-14 bg-white border-b border-slate-100 flex items-center justify-between px-4 sticky top-0 z-30">
+        <div className="lg:hidden h-14 bg-white/85 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 sticky top-0 z-30 shadow-soft">
           <button onClick={() => setMobileOpen(true)} className="text-slate-500 hover:text-ink">
             <Menu className="h-5 w-5" />
           </button>
@@ -171,14 +171,14 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         {/* Desktop top bar */}
         <div className="hidden lg:flex h-14 bg-white/80 backdrop-blur-sm border-b border-slate-100 items-center justify-between px-6 sticky top-0 z-30">
           <p className="text-sm text-slate-400">
-            Welcome back, <span className="font-semibold text-ink">{profile?.full_name?.split(' ')[0] || 'there'}</span>
+            Bon retour, <span className="font-semibold text-ink">{profile?.full_name?.split(' ')[0] || 'à vous'}</span>
           </p>
           {store && (
             <button
               onClick={() => navigate(`/store/${store.slug}`)}
               className="flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-ink transition-colors"
             >
-              View store
+              Voir la boutique
               <ExternalLink className="h-3.5 w-3.5" />
             </button>
           )}

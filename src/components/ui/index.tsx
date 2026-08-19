@@ -29,7 +29,7 @@ export function Badge({
 
 export function Card({ children, className, hover }: { children: ReactNode; className?: string; hover?: boolean }) {
   return (
-    <div className={classNames('card', hover && 'transition-all duration-200 hover:shadow-card', className)}>{children}</div>
+    <div className={classNames('card', hover && 'card-hover', className)}>{children}</div>
   );
 }
 
@@ -77,7 +77,7 @@ export function ConfirmDialog({
   onConfirm,
   title,
   message,
-  confirmLabel = 'Confirm',
+  confirmLabel = 'Confirmer',
   danger = false,
 }: {
   open: boolean;
@@ -91,12 +91,12 @@ export function ConfirmDialog({
   return (
     <div className={classNames('fixed inset-0 z-[1001] flex items-center justify-center p-4', !open && 'hidden')}>
       {open && <div className="absolute inset-0 bg-ink/30 backdrop-blur-sm animate-fade-in" onClick={onClose} />}
-      <div className="relative w-full max-w-sm bg-white rounded-3xl shadow-lift animate-scale-in p-6">
+      <div className="relative w-full max-w-sm bg-white rounded-3xl shadow-float animate-scale-in p-6">
         <h3 className="text-h4 mb-2">{title}</h3>
         <p className="text-sm text-slate-500 mb-6">{message}</p>
         <div className="flex items-center justify-end gap-3">
           <button onClick={onClose} className="btn-ghost">
-            Cancel
+            Annuler
           </button>
           <button
             onClick={() => {

@@ -78,7 +78,7 @@ function AppRoutes() {
 
   // Protected routes
   if (authLoading || (user && storeLoading)) {
-    return <LoadingPage label="Loading..." />;
+    return <LoadingPage label="Chargement..." />;
   }
 
   if (!user) {
@@ -97,7 +97,7 @@ function AppRoutes() {
     if (!store && !storeLoading) {
       return <Redirect to="/onboarding" />;
     }
-    if (!store) return <LoadingPage label="Loading store..." />;
+    if (!store) return <LoadingPage label="Chargement de la boutique..." />;
 
     // Store Builder is full-screen, no dashboard chrome
     if (route === '/dashboard/builder') return <StoreBuilderPage />;

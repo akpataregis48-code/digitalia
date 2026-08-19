@@ -115,7 +115,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateProfile = useCallback(
     async (patch: Partial<Profile>) => {
-      if (!user) return { error: 'Not authenticated' };
+      if (!user) return { error: 'Non authentifié' };
       const { data, error } = await supabase
         .from('profiles')
         .update(patch)

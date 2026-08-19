@@ -56,14 +56,14 @@ export async function processPayment(
   }
 
   const messages: Record<PaymentStatus, string> = {
-    success: 'Payment captured successfully',
-    pending: 'Payment is pending',
-    failed: 'Payment processing failed',
-    declined: 'Card was declined',
-    timeout: 'Payment request timed out',
-    cancelled: 'Payment was cancelled',
-    refunded: 'Payment has been refunded',
-    insufficient_funds: 'Insufficient funds available',
+    success: 'Paiement accepté avec succès',
+    pending: 'Paiement en attente',
+    failed: 'Échec du traitement du paiement',
+    declined: 'Carte refusée',
+    timeout: 'Délai dépassé pour la demande de paiement',
+    cancelled: 'Paiement annulé',
+    refunded: 'Paiement remboursé',
+    insufficient_funds: 'Fonds insuffisants',
   };
 
   return {
@@ -75,21 +75,30 @@ export async function processPayment(
 }
 
 export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
-  card: 'Card',
+  card: 'Carte',
   mobile_money: 'Mobile Money',
   paypal: 'PayPal',
 };
 
 export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
-  success: 'Success',
-  pending: 'Pending',
-  failed: 'Failed',
-  declined: 'Declined',
-  timeout: 'Timed out',
-  cancelled: 'Cancelled',
-  refunded: 'Refunded',
-  insufficient_funds: 'Insufficient funds',
+  success: 'Réussi',
+  pending: 'En attente',
+  failed: 'Échoué',
+  declined: 'Refusé',
+  timeout: 'Délai dépassé',
+  cancelled: 'Annulé',
+  refunded: 'Remboursé',
+  insufficient_funds: 'Fonds insuffisants',
 };
+
+export function paymentStatusLabel(status: PaymentStatus): string {
+  return PAYMENT_STATUS_LABELS[status] || status.replace(/_/g, ' ');
+}
+
+export function paymentMethodLabel(method?: PaymentMethod): string {
+  if (!method) return '—';
+  return PAYMENT_METHOD_LABELS[method] || method.replace(/_/g, ' ');
+}
 
 export const PAYMENT_STATUS_COLORS: Record<PaymentStatus, string> = {
   success: 'badge-success',

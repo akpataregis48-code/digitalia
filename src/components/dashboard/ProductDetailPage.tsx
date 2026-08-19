@@ -49,7 +49,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
         setOrders(allOrders.filter((o) => o.items?.some?.(() => false) || false));
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load product');
+      setError(e instanceof Error ? e.message : 'Échec du chargement du produit');
     }
     setLoading(false);
   };
@@ -60,7 +60,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
 
   const handleUpload = async () => {
     if (!uploadName.trim() || !uploadUrl.trim()) {
-      toast('Enter a file name and download URL', 'error');
+      toast('Saisissez un nom de fichier et une URL de téléchargement', 'error');
       return;
     }
     setUploading(true);
@@ -78,9 +78,9 @@ export function ProductDetailPage({ productId }: { productId: string }) {
       setUploadUrl('');
       setUploadSize('');
       setShowUpload(false);
-      toast('File added');
+      toast('Fichier ajouté');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to add file', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de l’ajout du fichier', 'error');
     }
     setUploading(false);
   };
@@ -89,9 +89,9 @@ export function ProductDetailPage({ productId }: { productId: string }) {
     try {
       await deleteProductFile(file.id);
       setFiles((prev) => prev.filter((f) => f.id !== file.id));
-      toast('File removed');
+      toast('Fichier supprimé');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to delete', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de la suppression', 'error');
     }
   };
 
@@ -106,9 +106,9 @@ export function ProductDetailPage({ productId }: { productId: string }) {
       });
       setProduct(updated);
       setEditing(false);
-      toast('Product updated');
+      toast('Produit mis à jour');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to update', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de la mise à jour', 'error');
     }
     setSavingEdit(false);
   };
@@ -127,15 +127,15 @@ export function ProductDetailPage({ productId }: { productId: string }) {
     try {
       const updated = await updateProduct(product.id, { status: newStatus });
       setProduct(updated);
-      toast(`Product ${newStatus}`);
+      toast(newStatus === 'published' ? 'Produit publié' : 'Produit mis en brouillon');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed', 'error');
+      toast(e instanceof Error ? e.message : 'Échec', 'error');
     }
   };
 
-  if (loading) return <LoadingPage label="Loading product..." />;
+  if (loading) return <LoadingPage label="Chargement du produit..." />;
   if (error) return <ErrorState message={error} onRetry={load} />;
-  if (!product) return <EmptyState icon={<Package className="h-7 w-7" />} title="Product not found" description="This product may have been deleted." />;
+  if (!product) return <EmptyState icon={<Package className="h-7 w-7" />} title="Produit introuvable" description="Ce produit a peut-être été supprimé." />;
 
   return (
     <div>
@@ -144,20 +144,20 @@ export function ProductDetailPage({ productId }: { productId: string }) {
         className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-ink transition-colors mb-4"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to products
+        Retour aux produits
       </button>
 
       <DashboardPageHeader
         title={editing ? '' : product.title}
-        description={editing ? undefined : `${product.category || 'Uncategorized'} · ${formatCurrency(product.price_cents)}`}
+        description={editing ? undefined : `${product.category || 'Sans catégorie'} · ${formatCurrency(product.price_cents)}`}
         action={
           !editing && (
             <div className="flex gap-2">
               <Button variant="outline" onClick={togglePublish} icon={product.status === 'published' ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}>
-                {product.status === 'published' ? 'Unpublish' : 'Publish'}
+                {product.status === 'published' ? 'Dépublier' : 'Publier'}
               </Button>
               <Button variant="outline" onClick={startEdit} icon={<Edit2 className="h-4 w-4" />}>
-                Edit
+                Modifier
               </Button>
             </div>
           )
@@ -167,19 +167,19 @@ export function ProductDetailPage({ productId }: { productId: string }) {
       {editing && (
         <Card className="p-5 mb-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold">Edit product</h3>
+            <h3 className="text-base font-semibold">Modifier le produit</h3>
             <button onClick={() => setEditing(false)} className="text-slate-400 hover:text-ink"><X className="h-5 w-5" /></button>
           </div>
           <div className="space-y-4">
-            <Input label="Title" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
-            <Input label="Price (USD)" type="number" step="0.01" value={editPrice} onChange={(e) => setEditPrice(e.target.value)} prefix={<span>$</span>} />
+            <Input label="Titre" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
+            <Input label="Prix (USD)" type="number" step="0.01" value={editPrice} onChange={(e) => setEditPrice(e.target.value)} prefix={<span>$</span>} />
             <div>
               <label className="label">Description</label>
               <textarea value={editDesc} onChange={(e) => setEditDesc(e.target.value)} className="input min-h-[100px]" />
             </div>
             <div className="flex gap-2 justify-end">
-              <Button variant="ghost" onClick={() => setEditing(false)}>Cancel</Button>
-              <Button onClick={handleSaveEdit} loading={savingEdit} icon={<Save className="h-4 w-4" />}>Save</Button>
+              <Button variant="ghost" onClick={() => setEditing(false)}>Annuler</Button>
+              <Button onClick={handleSaveEdit} loading={savingEdit} icon={<Save className="h-4 w-4" />}>Enregistrer</Button>
             </div>
           </div>
         </Card>
@@ -200,7 +200,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
             </div>
             <h3 className="text-sm font-semibold mb-2">Description</h3>
             <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">
-              {product.description || 'No description provided yet.'}
+              {product.description || 'Aucune description fournie pour le moment.'}
             </p>
             {product.tags.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-1.5">
@@ -215,22 +215,22 @@ export function ProductDetailPage({ productId }: { productId: string }) {
           <Card className="p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-base font-semibold">Digital files</h3>
-                <p className="text-sm text-slate-400">Files customers get after purchase</p>
+                <h3 className="text-base font-semibold">Fichiers numériques</h3>
+                <p className="text-sm text-slate-400">Fichiers reçus par les clients après l'achat</p>
               </div>
               <Button size="sm" onClick={() => setShowUpload(!showUpload)} icon={<Upload className="h-4 w-4" />}>
-                Add file
+                Ajouter un fichier
               </Button>
             </div>
 
             {showUpload && (
               <div className="rounded-xl bg-slate-50 border border-slate-100 p-4 mb-4 space-y-3">
-                <Input label="File name" value={uploadName} onChange={(e) => setUploadName(e.target.value)} placeholder="logo-pack.zip" />
-                <Input label="Download URL" value={uploadUrl} onChange={(e) => setUploadUrl(e.target.value)} placeholder="https://..." />
-                <Input label="Size in bytes (optional)" type="number" value={uploadSize} onChange={(e) => setUploadSize(e.target.value)} placeholder="10485760" />
+                <Input label="Nom du fichier" value={uploadName} onChange={(e) => setUploadName(e.target.value)} placeholder="logo-pack.zip" />
+                <Input label="URL de téléchargement" value={uploadUrl} onChange={(e) => setUploadUrl(e.target.value)} placeholder="https://..." />
+                <Input label="Taille en octets (facultatif)" type="number" value={uploadSize} onChange={(e) => setUploadSize(e.target.value)} placeholder="10485760" />
                 <div className="flex gap-2 justify-end">
-                  <Button variant="ghost" size="sm" onClick={() => setShowUpload(false)}>Cancel</Button>
-                  <Button size="sm" onClick={handleUpload} loading={uploading}>Add file</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setShowUpload(false)}>Annuler</Button>
+                  <Button size="sm" onClick={handleUpload} loading={uploading}>Ajouter le fichier</Button>
                 </div>
               </div>
             )}
@@ -238,9 +238,9 @@ export function ProductDetailPage({ productId }: { productId: string }) {
             {files.length === 0 ? (
               <EmptyState
                 icon={<FileText className="h-7 w-7" />}
-                title="No files uploaded"
-                description="Add the digital files that customers will download after purchase."
-                action={<Button size="sm" onClick={() => setShowUpload(true)} icon={<Upload className="h-4 w-4" />}>Add file</Button>}
+                title="Aucun fichier téléversé"
+                description="Ajoutez les fichiers numériques que les clients téléchargeront après l'achat."
+                action={<Button size="sm" onClick={() => setShowUpload(true)} icon={<Upload className="h-4 w-4" />}>Ajouter un fichier</Button>}
               />
             ) : (
               <div className="space-y-2">
@@ -259,7 +259,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="h-8 w-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-ink transition-colors"
-                        title="Download"
+                        title="Télécharger"
                       >
                         <Download className="h-4 w-4" />
                       </a>
@@ -267,7 +267,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
                     <button
                       onClick={() => setDeleteFile(file)}
                       className="h-8 w-8 rounded-lg hover:bg-red-50 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"
-                      title="Remove"
+                      title="Supprimer"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -281,40 +281,40 @@ export function ProductDetailPage({ productId }: { productId: string }) {
         {/* Sidebar */}
         <div className="space-y-5">
           <Card className="p-5">
-            <h3 className="text-sm font-semibold mb-3">Details</h3>
+            <h3 className="text-sm font-semibold mb-3">Détails</h3>
             <dl className="space-y-2.5 text-sm">
               <div className="flex justify-between">
-                <dt className="text-slate-400">Status</dt>
-                <dd><Badge variant={product.status === 'published' ? 'success' : product.status === 'draft' ? 'warning' : 'slate'}>{product.status}</Badge></dd>
+                <dt className="text-slate-400">Statut</dt>
+                <dd><Badge variant={product.status === 'published' ? 'success' : product.status === 'draft' ? 'warning' : 'slate'}>{product.status === 'published' ? 'publié' : product.status === 'draft' ? 'brouillon' : 'archivé'}</Badge></dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-400">Price</dt>
+                <dt className="text-slate-400">Prix</dt>
                 <dd className="font-semibold">{formatCurrency(product.price_cents)}</dd>
               </div>
               {product.compare_at_cents && (
                 <div className="flex justify-between">
-                  <dt className="text-slate-400">Compare at</dt>
+                  <dt className="text-slate-400">Prix barré</dt>
                   <dd className="text-slate-400 line-through">{formatCurrency(product.compare_at_cents)}</dd>
                 </div>
               )}
               <div className="flex justify-between">
-                <dt className="text-slate-400">Featured</dt>
-                <dd>{product.featured ? 'Yes' : 'No'}</dd>
+                <dt className="text-slate-400">Mis en avant</dt>
+                <dd>{product.featured ? 'Oui' : 'Non'}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-400">Created</dt>
+                <dt className="text-slate-400">Créé le</dt>
                 <dd>{formatDate(product.created_at)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-slate-400">Updated</dt>
+                <dt className="text-slate-400">Mis à jour</dt>
                 <dd>{formatRelative(product.updated_at)}</dd>
               </div>
             </dl>
           </Card>
 
           <Card className="p-5">
-            <h3 className="text-sm font-semibold mb-3">Storefront link</h3>
-            <p className="text-xs text-slate-400 mb-3">View this product on your public store</p>
+            <h3 className="text-sm font-semibold mb-3">Lien vitrine</h3>
+            <p className="text-xs text-slate-400 mb-3">Voir ce produit sur votre boutique publique</p>
             <Button
               variant="outline"
               size="sm"
@@ -322,7 +322,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
               onClick={() => store && navigate(`/store/${store.slug}/product/${product.slug}`)}
               icon={<ShoppingBag className="h-4 w-4" />}
             >
-              View on storefront
+              Voir sur la vitrine
             </Button>
           </Card>
         </div>
@@ -332,9 +332,9 @@ export function ProductDetailPage({ productId }: { productId: string }) {
         open={!!deleteFile}
         onClose={() => setDeleteFile(null)}
         onConfirm={() => deleteFile && handleDeleteFile(deleteFile)}
-        title="Remove file?"
-        message={`"${deleteFile?.name}" will be removed from this product.`}
-        confirmLabel="Remove"
+        title="Supprimer le fichier ?"
+        message={`« ${deleteFile?.name} » sera retiré de ce produit.`}
+        confirmLabel="Supprimer"
         danger
       />
     </div>

@@ -14,19 +14,19 @@ import { Wand2, Sparkles, Trash2, Download, Copy, Check } from 'lucide-react';
 
 const STYLES = [
   { value: 'minimal', label: 'Minimal' },
-  { value: 'gradient', label: 'Gradient' },
-  { value: 'editorial', label: 'Editorial' },
-  { value: 'playful', label: 'Playful' },
-  { value: 'bold', label: 'Bold' },
-  { value: 'soft', label: 'Soft' },
+  { value: 'gradient', label: 'Dégradé' },
+  { value: 'editorial', label: 'Éditorial' },
+  { value: 'playful', label: 'Ludique' },
+  { value: 'bold', label: 'Audacieux' },
+  { value: 'soft', label: 'Doux' },
 ];
 
 const PROMPT_IDEAS = [
-  'A clean ebook cover about productivity',
-  'Premium 3D icon set for a SaaS app',
-  'Gradient background for a course landing page',
-  'Abstract geometric pattern for templates',
-  'Soft watercolor texture for invitation designs',
+  'Une couverture d’e-book sobre sur la productivité',
+  'Un set d’icônes 3D premium pour une application SaaS',
+  'Un fond en dégradé pour une page de cours',
+  'Un motif géométrique abstrait pour des modèles',
+  'Une texture aquarelle douce pour des invitations',
 ];
 
 // Deterministic gradient generator from a prompt string (no external API)
@@ -85,7 +85,7 @@ export function AiMockStudioPage() {
       const data = await listAiMocks(store.id);
       setMocks(data);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load mocks');
+      setError(e instanceof Error ? e.message : 'Échec du chargement des maquettes');
     }
     setLoading(false);
   };
@@ -97,7 +97,7 @@ export function AiMockStudioPage() {
   const handleGenerate = async () => {
     if (!store) return;
     if (!prompt.trim()) {
-      toast('Enter a prompt first', 'error');
+      toast('Saisissez d’abord une invite', 'error');
       return;
     }
     setGenerating(true);
@@ -110,9 +110,9 @@ export function AiMockStudioPage() {
       const resultUrl = generateMockImage(prompt.trim(), style);
       const updated = await updateAiMock(mock.id, { status: 'completed', result_url: resultUrl });
       setMocks((prev) => prev.map((m) => (m.id === mock.id ? updated : m)));
-      toast('Mockup generated');
+      toast('Maquette générée');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to generate', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de la génération', 'error');
     }
     setGenerating(false);
   };
@@ -121,9 +121,9 @@ export function AiMockStudioPage() {
     try {
       await deleteAiMock(mock.id);
       setMocks((prev) => prev.filter((m) => m.id !== mock.id));
-      toast('Mockup deleted');
+      toast('Maquette supprimée');
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Failed to delete', 'error');
+      toast(e instanceof Error ? e.message : 'Échec de la suppression', 'error');
     }
   };
 
@@ -133,14 +133,14 @@ export function AiMockStudioPage() {
     setTimeout(() => setCopiedPrompt(null), 2000);
   };
 
-  if (loading) return <LoadingPage label="Loading studio..." />;
+  if (loading) return <LoadingPage label="Chargement du studio..." />;
   if (error) return <ErrorState message={error} onRetry={load} />;
 
   return (
     <div>
       <DashboardPageHeader
         title="AI Mock Studio"
-        description="Generate product mockups from text prompts"
+        description="Générez des maquettes de produits à partir d'invites textuelles"
       />
 
       <div className="grid lg:grid-cols-3 gap-5">
@@ -151,19 +151,19 @@ export function AiMockStudioPage() {
               <Wand2 className="h-4.5 w-4.5 text-white" />
             </div>
             <div>
-              <h3 className="text-sm font-semibold">Generate mockup</h3>
-              <p className="text-xs text-slate-400">Describe what you want</p>
+              <h3 className="text-sm font-semibold">Générer une maquette</h3>
+              <p className="text-xs text-slate-400">Décrivez ce que vous voulez</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="label">Prompt</label>
+              <label className="label">Invite</label>
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 className="input min-h-[80px] resize-y"
-                placeholder="A clean ebook cover about productivity..."
+                placeholder="Une couverture d'e-book sobre sur la productivité..."
               />
             </div>
             <Select
@@ -174,7 +174,7 @@ export function AiMockStudioPage() {
             />
 
             <div>
-              <p className="text-xs font-semibold text-slate-400 mb-2">Prompt ideas</p>
+              <p className="text-xs font-semibold text-slate-400 mb-2">Idées d'invites</p>
               <div className="space-y-1.5">
                 {PROMPT_IDEAS.map((idea) => (
                   <button
@@ -195,7 +195,7 @@ export function AiMockStudioPage() {
               className="w-full"
               icon={!generating ? <Sparkles className="h-4 w-4" /> : undefined}
             >
-              {generating ? 'Generating...' : 'Generate mockup'}
+              {generating ? 'Génération...' : 'Générer la maquette'}
             </Button>
           </div>
         </Card>
@@ -206,8 +206,8 @@ export function AiMockStudioPage() {
             <Card className="p-0">
               <EmptyState
                 icon={<Wand2 className="h-7 w-7" />}
-                title="No mockups yet"
-                description="Write a prompt and generate your first AI mockup. It will appear here."
+                title="Aucune maquette pour le moment"
+                description="Écrivez une invite et générez votre première maquette IA. Elle apparaîtra ici."
               />
             </Card>
           ) : (
@@ -221,7 +221,7 @@ export function AiMockStudioPage() {
                       <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
                         <div className="text-center">
                           <div className="h-8 w-8 border-2 border-turquoise-200 border-t-turquoise-400 rounded-full animate-spin mx-auto mb-2" />
-                          <p className="text-xs text-slate-400">Generating...</p>
+                          <p className="text-xs text-slate-400">Génération...</p>
                         </div>
                       </div>
                     )}
@@ -272,9 +272,9 @@ export function AiMockStudioPage() {
         open={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
         onConfirm={() => deleteTarget && handleDelete(deleteTarget)}
-        title="Delete mockup?"
-        message="This mockup will be permanently deleted."
-        confirmLabel="Delete"
+        title="Supprimer la maquette ?"
+        message="Cette maquette sera définitivement supprimée."
+        confirmLabel="Supprimer"
         danger
       />
     </div>
